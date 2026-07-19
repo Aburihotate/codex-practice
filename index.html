@@ -524,7 +524,7 @@
 </main>
 
 <footer>
-  Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Calligraphy font: Yuji Syuku · Kanji chosen phonetically (ateji 当て字)
+  Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Calligraphy font: Yuji Syuku · Kanji chosen phonetically (ateji 当て字) · <a href="legal.html">Legal &amp; Privacy 特定商取引法表記</a>
 </footer>
 
 <div class="modal-overlay" id="payModal">
@@ -556,8 +556,13 @@ const CONFIG = {
   stripeLink: "",                    // e.g. "https://buy.stripe.com/xxxx"
   price: "$6.99",
   unlockCode: "HIMEJI-OMIYAGE",      // manual/receipt unlock code
-  tipLink: ""                        // optional: Ko-fi / Buy Me a Coffee URL
+  tipLink: "",                       // optional: Ko-fi / Buy Me a Coffee URL
+  kanaApiUrl: "",                    // optional: transliteration API endpoint (see api/transliterate-worker.js)
+  analyticsDomain: ""                // optional: your domain registered at plausible.io, e.g. "kanjiname.jp"
 };
+
+/* privacy-friendly event tracking (no-op until analyticsDomain is set) */
+function track(name) { try { if (window.plausible) window.plausible(name); } catch (e) {} }
 
 let premium = false;
 try { premium = localStorage.getItem("knPremium") === "1"; } catch (e) {}
@@ -650,49 +655,60 @@ const NAME_DICT = {
   "silva":"シルバ","santos":"サントス","costa":"コスタ","oliveira":"オリベイラ"
 };
 
-/* Rough fallback: English-ish spelling → katakana (very approximate). */
+/* English-ish spelling → katakana. Rule-based phonics: soft c/g,
+   consonant digraphs, doubled-consonant collapse, magic-e, vowel digraphs.
+   Names outside the dictionary go through this; CONFIG.kanaApiUrl can
+   refine the result asynchronously with an LLM. */
 function fallbackToKana(name) {
   let s = name.toLowerCase().replace(/[^a-z]/g, "");
   if (!s) return "";
-  const V = { a:"ア", i:"イ", u:"ウ", e:"エ", o:"オ", y:"イ" };
-  const C = {
-    b:"バビブベボ", c:"カシクセコ", d:"ダジヅデド", f:"ファフィフフェフォ",
-    g:"ガギグゲゴ", h:"ハヒフヘホ", j:"ジャジジュジェジョ", k:"カキクケコ",
-    l:"ラリルレロ", m:"マミムメモ", n:"ナニヌネノ", p:"パピプペポ",
-    q:"カキクケコ", r:"ラリルレロ", s:"サシスセソ", t:"タチツテト",
-    v:"バビブベボ", w:"ワウィウウェウォ", z:"ザジズゼゾ"
+  s = s.replace(/c(?=[eiy])/g, "s").replace(/g(?=[eiy])/g, "j");
+  s = s.replace(/chr/g, "kr").replace(/sh/g, "S").replace(/ch/g, "C").replace(/th/g, "s")
+       .replace(/ph/g, "f").replace(/wh/g, "w").replace(/ck/g, "k")
+       .replace(/qu/g, "kw").replace(/x/g, "ks");
+  s = s.replace(/([bcdfghjklmnprstvz])\1/g, "$1");
+  // magic e: mike → mIk (アイ), kate → kAt (エイ)
+  s = s.replace(/([aiou])([bcdfgjklmnprstvzSC])e$/, (m, v, c) =>
+    ({ a: "A", i: "I", o: "O", u: "U" }[v]) + c);
+  // vowel digraphs → long-vowel markers (diphthongs first, then y$ endings)
+  s = s.replace(/igh/g, "I")
+       .replace(/oi|oy/g, "X")
+       .replace(/ai|ay|ei/g, "A")
+       .replace(/oa|ow$/g, "O")
+       .replace(/ou|ow/g, "W")
+       .replace(/oo|ew/g, "U")
+       .replace(/au|aw/g, "Q")
+       .replace(/ee|ea|ie$|ey$|y$/g, "E");
+
+  const COLS = { a: 0, i: 1, u: 2, e: 3, o: 4, y: 1 };
+  const LONG = { A: ["e", "イ"], E: ["i", "ー"], I: ["a", "イ"], O: ["o", "ウ"],
+                 U: ["u", "ー"], W: ["a", "ウ"], X: ["o", "イ"], Q: ["o", "ー"] };
+  const ROWS = {
+    b: "バビブベボ", d: ["ダ", "ディ", "ドゥ", "デ", "ド"], f: ["ファ", "フィ", "フ", "フェ", "フォ"],
+    g: "ガギグゲゴ", h: "ハヒフヘホ", j: ["ジャ", "ジ", "ジュ", "ジェ", "ジョ"],
+    k: "カキクケコ", l: "ラリルレロ", m: "マミムメモ", n: "ナニヌネノ",
+    p: "パピプペポ", r: "ラリルレロ", s: "サシスセソ",
+    t: ["タ", "ティ", "トゥ", "テ", "ト"],
+    v: "バビブベボ", w: ["ワ", "ウィ", "ウ", "ウェ", "ウォ"], z: "ザジズゼゾ",
+    S: ["シャ", "シ", "シュ", "シェ", "ショ"], C: ["チャ", "チ", "チュ", "チェ", "チョ"]
   };
-  const idx = { a:0, i:1, u:2, e:3, o:4, y:1 };
-  const multi = { f:true, j:true, w:true };
-  // digraphs first
-  s = s.replace(/sh/g, "S").replace(/ch/g, "C").replace(/th/g, "s").replace(/ph/g, "f")
-       .replace(/ck/g, "k").replace(/qu/g, "k").replace(/x/g, "ks");
-  const DG = { S:"シャシシュシェショ", C:"チャチチュチェチョ" };
+  const VOW = { a: "ア", i: "イ", u: "ウ", e: "エ", o: "オ", y: "イ" };
+  const SOLO = { b: "ブ", d: "ド", f: "フ", g: "グ", h: "フ", j: "ジュ", k: "ク",
+                 l: "ル", m: "ム", n: "ン", p: "プ", r: "ル", s: "ス", t: "ト",
+                 v: "ブ", w: "ウ", z: "ズ", S: "シュ", C: "チ" };
   let out = "", i = 0;
   while (i < s.length) {
-    const c = s[i], nx = s[i+1];
-    if (DG[c]) {
-      const units = DG[c].match(/.[ャュェョァィゥェォ]?/g);
-      out += (nx && idx[nx] !== undefined) ? units[idx[nx]] : "シュ";
-      i += (nx && idx[nx] !== undefined) ? 2 : 1; continue;
-    }
-    if (V[c] && !C[c]) { out += V[c]; i++; continue; }
-    if (C[c]) {
-      if (nx && idx[nx] !== undefined) {
-        const row = C[c];
-        if (multi[c]) {
-          const units = row.match(/.[ィェォャュョ]?/g);
-          out += units[idx[nx]];
-        } else {
-          out += row[idx[nx]];
-        }
-        i += 2; continue;
+    const c = s[i], nx = s[i + 1];
+    if (ROWS[c]) {
+      if (nx !== undefined && COLS[nx] !== undefined) { out += ROWS[c][COLS[nx]]; i += 2; continue; }
+      if (nx !== undefined && LONG[nx]) {
+        const [v, suf] = LONG[nx];
+        out += ROWS[c][COLS[v]] + suf; i += 2; continue;
       }
-      if (c === "n") { out += "ン"; i++; continue; }
-      const solo = { t:"ト", d:"ド", k:"ク", c:"ク", q:"ク", s:"ス", r:"ル", l:"ル",
-                     m:"ム", b:"ブ", v:"ブ", p:"プ", g:"グ", f:"フ", h:"フ", z:"ズ", j:"ジュ", w:"ウ" };
-      out += solo[c] || ""; i++; continue;
+      out += SOLO[c]; i++; continue;
     }
+    if (VOW[c]) { out += VOW[c]; i++; continue; }
+    if (LONG[c]) { const [v, suf] = LONG[c]; out += VOW[v] + suf; i++; continue; }
     i++;
   }
   return out;
@@ -1373,8 +1389,33 @@ function syncKana() {
   if (l) parts.push(nameToKana(l));
   document.getElementById("kanaInput").value = parts.join("・");
 }
-document.getElementById("firstName").addEventListener("input", syncKana);
-document.getElementById("lastName").addEventListener("input", syncKana);
+let kanaFetchTimer = null;
+function refineKanaViaAPI() {
+  if (!CONFIG.kanaApiUrl) return;
+  const f = document.getElementById("firstName").value.trim();
+  const l = document.getElementById("lastName").value.trim();
+  const inDict = n => !n || !!NAME_DICT[n.toLowerCase().replace(/[^a-z]/g, "")];
+  if (inDict(f) && inDict(l)) return;   // dictionary already handled it
+  clearTimeout(kanaFetchTimer);
+  kanaFetchTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(CONFIG.kanaApiUrl, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: [f, l].filter(Boolean).join(" ") })
+      });
+      const data = await res.json();
+      // only apply if the inputs haven't changed while we waited
+      if (data.kana &&
+          document.getElementById("firstName").value.trim() === f &&
+          document.getElementById("lastName").value.trim() === l) {
+        document.getElementById("kanaInput").value = data.kana.trim().replace(/[\s,]+/g, "・");
+      }
+    } catch (e) { /* offline or API down — rule-based result stays */ }
+  }, 700);
+}
+document.getElementById("firstName").addEventListener("input", () => { syncKana(); refineKanaViaAPI(); });
+document.getElementById("lastName").addEventListener("input", () => { syncKana(); refineKanaViaAPI(); });
 
 document.getElementById("styleTabs").addEventListener("click", e => {
   const btn = e.target.closest(".style-btn");
@@ -1385,7 +1426,7 @@ document.getElementById("styleTabs").addEventListener("click", e => {
   if (current.length) generate(false);
 });
 
-document.getElementById("generateBtn").addEventListener("click", () => { generate(false); burstPetals(); });
+document.getElementById("generateBtn").addEventListener("click", () => { generate(false); burstPetals(); track("generate"); });
 document.getElementById("shuffleBtn").addEventListener("click", () => generate(true));
 
 document.getElementById("wpThemes").addEventListener("click", e => {
@@ -1399,12 +1440,13 @@ document.getElementById("wpThemes").addEventListener("click", e => {
 
 /* ---- Deluxe unlock flow ---- */
 const payModal = document.getElementById("payModal");
-function openPayModal() { payModal.classList.add("open"); }
+function openPayModal() { payModal.classList.add("open"); track("unlock_open"); }
 function closePayModal() { payModal.classList.remove("open"); }
 document.getElementById("unlockBtn").addEventListener("click", openPayModal);
 document.getElementById("modalClose").addEventListener("click", closePayModal);
 payModal.addEventListener("click", e => { if (e.target === payModal) closePayModal(); });
 document.getElementById("payBtn").addEventListener("click", () => {
+  track("pay_click");
   if (CONFIG.stripeLink) { location.href = CONFIG.stripeLink; }
   else {
     document.getElementById("payBtn").textContent = "Card payments launch soon — try a code ✦";
@@ -1427,12 +1469,14 @@ document.getElementById("modalCodeBtn").addEventListener("click", askCode);
 document.getElementById("scrollBtn").addEventListener("click", () => {
   if (!current.length) return;
   if (!premium) { openPayModal(); return; }
+  track("dl_scroll");
   downloadCanvas(drawStoryScroll(), "kanji-name-story.png");
 });
 
 document.getElementById("tattooBtn").addEventListener("click", () => {
   if (!current.length) return;
   if (!premium) { openPayModal(); return; }
+  track("dl_tattoo");
   downloadCanvas(drawTattoo(), "kanji-tattoo-ink.png");
 });
 
@@ -1471,11 +1515,13 @@ function burstPetals() {
 
 document.getElementById("wallpaperBtn").addEventListener("click", () => {
   if (!current.length) return;
+  track("dl_wallpaper");
   downloadCanvas(drawWallpaper(wpTheme), "kanji-name-wallpaper.png");
 });
 
 document.getElementById("downloadBtn").addEventListener("click", () => {
   if (!current.length) return;
+  track("dl_certificate");
   downloadCanvas(drawCertificate(), "my-kanji-name.png");
 });
 
@@ -1513,7 +1559,14 @@ document.getElementById("linkBtn").addEventListener("click", async () => {
 document.getElementById("priceTag").innerHTML = CONFIG.price + ' <span class="once">one-time</span>';
 document.getElementById("modalPrice").textContent = CONFIG.price;
 const bootQ = new URLSearchParams(location.search);
-if ((bootQ.get("unlock") || "").trim().toUpperCase() === CONFIG.unlockCode) setPremium(true);
+if ((bootQ.get("unlock") || "").trim().toUpperCase() === CONFIG.unlockCode) { setPremium(true); track("unlocked"); }
+if (CONFIG.analyticsDomain) {
+  const sc = document.createElement("script");
+  sc.defer = true;
+  sc.src = "https://plausible.io/js/script.js";
+  sc.setAttribute("data-domain", CONFIG.analyticsDomain);
+  document.head.appendChild(sc);
+}
 refreshPremiumUI();
 if (document.fonts && document.fonts.load) {
   document.fonts.load('40px "Yuji Syuku"', "漢字命名所 KANJI").catch(() => {});

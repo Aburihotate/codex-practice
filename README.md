@@ -64,6 +64,22 @@
 
 補助収益:投げ銭(`CONFIG.tipLink`にKo-fi URLを入れるだけ)、将来は広告枠。
 
+## v4で追加された運用機能
+
+### 音写精度(3段構え)
+1. **辞書** 約280名(英・西・仏・伊・アラビア・スラブ・アジア圏)
+2. **フォニックスエンジン**(改良済み): magic-e(Mike→マイク)、母音二重字(Paul→ポール、Brown→ブラウン)、軟音c/g(Grace→グレイス)などの英語発音規則を実装
+3. **LLM API**(オプション): `api/transliterate-worker.js` をCloudflare Workersに貼り付け→`CONFIG.kanaApiUrl`に設定で、どの言語の名前も正確にカタカナ化。エッジキャッシュ付きで1ユニーク名につき1回だけ課金(モデルは既定claude-opus-4-8、コスト優先ならファイル内でclaude-haiku-4-5に変更可)
+
+### 法的ページ(`legal.html`)
+特商法表記(日本語)+ Privacy Policy + Refund Policy + フォントライセンス表記。
+**公開前に【】のプレースホルダー(氏名・住所・連絡先メール・日付)を必ず記入すること。**
+
+### 計測(Plausible)
+`CONFIG.analyticsDomain` にドメインを入れるだけで有効化(Cookieレス・GDPR配慮でEUの同意バナー不要)。
+計測イベント: `generate` / `unlock_open` / `pay_click` / `unlocked` / `dl_wallpaper` / `dl_certificate` / `dl_scroll` / `dl_tattoo`。
+ファネル: generate → unlock_open → pay_click → unlocked でCVRを毎日確認できる。
+
 ## ロードマップ
 
 - **フェーズ2(オンライン強化)**: サーバー検証ライセンス、Stripe Webhook、多言語UI(西・仏・中)、LLMによる高精度音写
