@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KANJI NAME 漢字命名所 — Get Your Japanese Kanji Name</title>
+<style>
+  :root {
+    --paper: #f7f1e3;
+    --paper-dark: #efe6d0;
+    --ink: #2b2620;
+    --vermilion: #c73e2d;
+    --gold: #b8963e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+    background: var(--paper);
+    background-image: radial-gradient(circle at 20% 10%, rgba(199,62,45,.04), transparent 40%),
+                      radial-gradient(circle at 80% 90%, rgba(184,150,62,.05), transparent 40%);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  header {
+    text-align: center;
+    padding: 2.2rem 1rem 1rem;
+  }
+  header .subtitle-jp {
+    font-size: .85rem;
+    letter-spacing: .5em;
+    color: var(--vermilion);
+    margin-bottom: .4rem;
+  }
+  header h1 {
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    letter-spacing: .08em;
+    font-weight: 600;
+  }
+  header p.tagline {
+    margin-top: .6rem;
+    font-size: .95rem;
+    color: #6b6154;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem 1rem 4rem;
+  }
+  .panel {
+    background: #fffdf8;
+    border: 1px solid #e0d5bd;
+    border-radius: 10px;
+    padding: 1.4rem;
+    box-shadow: 0 2px 10px rgba(60,45,20,.06);
+    margin-bottom: 1.4rem;
+  }
+  label.field-label {
+    display: block;
+    font-size: .8rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: #8a7d66;
+    margin-bottom: .35rem;
+  }
+  .name-inputs {
+    display: flex;
+    gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .name-inputs > div { flex: 1 1 200px; }
+  input[type=text] {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1.15rem;
+    padding: .6rem .8rem;
+    border: 1.5px solid #d4c7a8;
+    border-radius: 6px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  input[type=text]:focus { outline: 2px solid var(--vermilion); border-color: transparent; }
+  .kana-row {
+    margin-top: .9rem;
+    font-size: .85rem;
+    color: #6b6154;
+  }
+  .kana-row input { font-size: 1rem; margin-top: .3rem; }
+  .styles {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    margin: 1.1rem 0 .4rem;
+  }
+  .style-btn {
+    font-family: inherit;
+    font-size: .95rem;
+    padding: .5rem 1.1rem;
+    border: 1.5px solid #d4c7a8;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .style-btn .en { font-size: .75rem; color: #8a7d66; margin-left: .3em; }
+  .style-btn.active {
+    background: var(--vermilion);
+    border-color: var(--vermilion);
+    color: #fff;
+  }
+  .style-btn.active .en { color: #f5cfc8; }
+  .actions {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  button.primary, button.secondary {
+    font-family: inherit;
+    font-size: 1.05rem;
+    padding: .65rem 1.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+  }
+  button.primary {
+    background: var(--ink);
+    color: var(--paper);
+    letter-spacing: .1em;
+  }
+  button.primary:hover { background: #453d33; }
+  button.secondary {
+    background: transparent;
+    border: 1.5px solid #d4c7a8;
+    color: var(--ink);
+  }
+  button.secondary:hover { border-color: var(--ink); }
+
+  /* ---- Result ---- */
+  #result { display: none; }
+  .certificate-wrap {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .certificate {
+    flex: 0 0 auto;
+    margin: 0 auto;
+    background: linear-gradient(160deg, #fffef9, #f6efdd);
+    border: 3px double var(--gold);
+    border-radius: 6px;
+    padding: 1.6rem 2rem;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .certificate .cert-title {
+    writing-mode: vertical-rl;
+    position: absolute;
+    top: 1.2rem;
+    right: 1rem;
+    font-size: .75rem;
+    letter-spacing: .4em;
+    color: var(--gold);
+  }
+  .vertical-name {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: clamp(2.6rem, 8vw, 3.6rem);
+    line-height: 1.15;
+    letter-spacing: .1em;
+    margin: 1rem 0;
+    font-weight: 600;
+  }
+  .vertical-kana {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: .8rem;
+    color: #8a7d66;
+    letter-spacing: .2em;
+    position: absolute;
+    top: 3.4rem;
+    left: 1rem;
+  }
+  .seal {
+    width: 46px; height: 46px;
+    border: 2.5px solid var(--vermilion);
+    border-radius: 8px;
+    color: var(--vermilion);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    line-height: 1.1;
+    writing-mode: vertical-rl;
+    margin-top: auto;
+    align-self: flex-end;
+    transform: rotate(-3deg);
+  }
+  .meanings {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  .meaning-row {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    background: #fffdf8;
+    border: 1px solid #e8dfc9;
+    border-radius: 8px;
+    padding: .55rem .9rem;
+  }
+  .meaning-row .k {
+    font-size: 1.9rem;
+    font-weight: 600;
+    min-width: 2.2rem;
+    text-align: center;
+  }
+  .meaning-row .r {
+    font-size: .75rem;
+    color: var(--vermilion);
+    min-width: 2.4rem;
+  }
+  .meaning-row .m { font-size: .95rem; color: #4d453a; }
+  .meaning-row .swap {
+    margin-left: auto;
+    background: none;
+    border: 1px solid #d4c7a8;
+    border-radius: 6px;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: .75rem;
+    padding: .25rem .55rem;
+    color: #8a7d66;
+  }
+  .meaning-row .swap:hover { border-color: var(--vermilion); color: var(--vermilion); }
+  .name-sentence {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #5a5142;
+    text-align: center;
+    width: 100%;
+  }
+  .space-note { font-size: .8rem; color: #8a7d66; margin-top: .8rem; }
+  footer {
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    font-size: .8rem;
+    color: #9a8f7c;
+  }
+  footer .himeji { color: var(--vermilion); }
+</style>
+</head>
+<body>
+<header>
+  <div class="subtitle-jp">漢字命名所</div>
+  <h1>KANJI NAME GENERATOR</h1>
+  <p class="tagline">Turn your name into a real Japanese kanji name — with meaning.</p>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="name-inputs">
+      <div>
+        <label class="field-label" for="firstName">First name</label>
+        <input type="text" id="firstName" placeholder="Michael" autocomplete="given-name">
+      </div>
+      <div>
+        <label class="field-label" for="lastName">Last name (optional)</label>
+        <input type="text" id="lastName" placeholder="Smith" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="kana-row">
+      Pronunciation in Japanese (auto-generated — feel free to fix it):
+      <input type="text" id="kanaInput" placeholder="マイケル・スミス">
+    </div>
+
+    <div class="styles" id="styleTabs">
+      <button class="style-btn active" data-style="cool">侍 <span class="en">Samurai / Cool</span></button>
+      <button class="style-btn" data-style="elegant">雅 <span class="en">Elegant</span></button>
+      <button class="style-btn" data-style="lucky">福 <span class="en">Lucky</span></button>
+      <button class="style-btn" data-style="funny">笑 <span class="en">Funny</span></button>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="generateBtn">Generate 生成</button>
+      <button class="secondary" id="shuffleBtn">Shuffle 変化</button>
+      <button class="secondary" id="downloadBtn">Save Image 保存</button>
+    </div>
+  </div>
+
+  <div class="panel" id="result">
+    <div class="certificate-wrap">
+      <div class="certificate" id="certificate">
+        <div class="cert-title">命名之証</div>
+        <div class="vertical-kana" id="certKana"></div>
+        <div class="vertical-name" id="certName"></div>
+        <div class="seal">姫路</div>
+      </div>
+      <div class="meanings" id="meanings"></div>
+    </div>
+    <div class="name-sentence" id="nameSentence"></div>
+    <div class="space-note">Tap 変 on any character to swap it for another kanji with the same sound.</div>
+  </div>
+</main>
+
+<footer>
+  Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Kanji chosen phonetically (ateji 当て字), just like Japanese did for foreign words for centuries.
+</footer>
+
+<canvas id="dlCanvas" width="720" height="1080" style="display:none"></canvas>
+
+<script>
+/* ============================================================
+   1. Name → Katakana
+   ============================================================ */
+const NAME_DICT = {
+  // -- first names --
+  "michael":"マイケル","john":"ジョン","david":"デイビッド","james":"ジェームズ",
+  "robert":"ロバート","william":"ウィリアム","richard":"リチャード","thomas":"トーマス",
+  "charles":"チャールズ","daniel":"ダニエル","matthew":"マシュー","anthony":"アンソニー",
+  "mark":"マーク","steven":"スティーブン","andrew":"アンドリュー","joshua":"ジョシュア",
+  "kevin":"ケビン","brian":"ブライアン","george":"ジョージ","edward":"エドワード",
+  "ronald":"ロナルド","timothy":"ティモシー","jason":"ジェイソン","jeffrey":"ジェフリー",
+  "ryan":"ライアン","jacob":"ジェイコブ","nicholas":"ニコラス","eric":"エリック",
+  "jonathan":"ジョナサン","stephen":"スティーブン","justin":"ジャスティン","scott":"スコット",
+  "brandon":"ブランドン","benjamin":"ベンジャミン","samuel":"サミュエル","henry":"ヘンリー",
+  "alexander":"アレクサンダー","alex":"アレックス","patrick":"パトリック","jack":"ジャック",
+  "dennis":"デニス","jerry":"ジェリー","tyler":"タイラー","aaron":"アーロン",
+  "adam":"アダム","nathan":"ネイサン","peter":"ピーター","noah":"ノア",
+  "christopher":"クリストファー","chris":"クリス","liam":"リアム","oliver":"オリバー",
+  "ethan":"イーサン","lucas":"ルーカス","mason":"メイソン","logan":"ローガン",
+  "leo":"レオ","luke":"ルーク","max":"マックス","tom":"トム","mike":"マイク",
+  "paul":"ポール","kenneth":"ケネス","joseph":"ジョセフ","joe":"ジョー",
+  "sean":"ショーン","carlos":"カルロス","juan":"フアン","luis":"ルイス",
+  "pierre":"ピエール","hans":"ハンス","marco":"マルコ","antonio":"アントニオ",
+  "mary":"メアリー","patricia":"パトリシア","jennifer":"ジェニファー","linda":"リンダ",
+  "elizabeth":"エリザベス","barbara":"バーバラ","susan":"スーザン","jessica":"ジェシカ",
+  "sarah":"サラ","karen":"カレン","nancy":"ナンシー","lisa":"リサ",
+  "betty":"ベティ","margaret":"マーガレット","sandra":"サンドラ","ashley":"アシュリー",
+  "kimberly":"キンバリー","emily":"エミリー","donna":"ドナ","michelle":"ミシェル",
+  "carol":"キャロル","amanda":"アマンダ","melissa":"メリッサ","deborah":"デボラ",
+  "stephanie":"ステファニー","rebecca":"レベッカ","laura":"ローラ","helen":"ヘレン",
+  "amy":"エイミー","anna":"アンナ","angela":"アンジェラ","ruth":"ルース",
+  "brittany":"ブリタニー","diane":"ダイアン","olivia":"オリビア","emma":"エマ",
+  "ava":"エイバ","sophia":"ソフィア","isabella":"イザベラ","mia":"ミア",
+  "charlotte":"シャーロット","amelia":"アメリア","harper":"ハーパー","chloe":"クロエ",
+  "grace":"グレイス","lily":"リリー","zoe":"ゾーイ","hannah":"ハンナ",
+  "kate":"ケイト","katherine":"キャサリン","lucy":"ルーシー","alice":"アリス",
+  "julia":"ジュリア","maria":"マリア","sofia":"ソフィア","nina":"ニーナ",
+  // -- last names --
+  "smith":"スミス","johnson":"ジョンソン","williams":"ウィリアムズ","brown":"ブラウン",
+  "jones":"ジョーンズ","garcia":"ガルシア","miller":"ミラー","davis":"デイビス",
+  "rodriguez":"ロドリゲス","martinez":"マルティネス","hernandez":"エルナンデス",
+  "lopez":"ロペス","gonzalez":"ゴンザレス","wilson":"ウィルソン","anderson":"アンダーソン",
+  "taylor":"テイラー","moore":"ムーア","jackson":"ジャクソン","martin":"マーティン",
+  "lee":"リー","thompson":"トンプソン","white":"ホワイト","harris":"ハリス",
+  "clark":"クラーク","lewis":"ルイス","robinson":"ロビンソン","walker":"ウォーカー",
+  "young":"ヤング","allen":"アレン","king":"キング","wright":"ライト",
+  "hill":"ヒル","green":"グリーン","baker":"ベイカー","adams":"アダムズ",
+  "nelson":"ネルソン","carter":"カーター","mitchell":"ミッチェル","turner":"ターナー",
+  "phillips":"フィリップス","parker":"パーカー","evans":"エバンス","edwards":"エドワーズ",
+  "collins":"コリンズ","stewart":"スチュワート","morris":"モリス","murphy":"マーフィー",
+  "cook":"クック","rogers":"ロジャース","cooper":"クーパー","peterson":"ピーターソン",
+  "bailey":"ベイリー","reed":"リード","kelly":"ケリー","howard":"ハワード",
+  "ward":"ウォード","cox":"コックス","richardson":"リチャードソン","wood":"ウッド",
+  "watson":"ワトソン","brooks":"ブルックス","bennett":"ベネット","gray":"グレイ",
+  "james_l":"ジェームズ","hughes":"ヒューズ","price":"プライス","myers":"マイヤーズ",
+  "long":"ロング","ross":"ロス","foster":"フォスター","powell":"パウエル",
+  "mueller":"ミュラー","muller":"ミュラー","schmidt":"シュミット","schneider":"シュナイダー",
+  "fischer":"フィッシャー","weber":"ウェーバー","wagner":"ワーグナー","becker":"ベッカー",
+  "dubois":"デュボワ","bernard":"ベルナール","rossi":"ロッシ","russo":"ルッソ",
+  "ferrari":"フェラーリ","kim":"キム","nguyen":"グエン","chen":"チェン","wang":"ワン"
+};
+
+/* Rough fallback: English-ish spelling → katakana (very approximate). */
+function fallbackToKana(name) {
+  let s = name.toLowerCase().replace(/[^a-z]/g, "");
+  if (!s) return "";
+  const rules = [
+    [/^mc/, "マク"], [/tion/g, "ション"], [/sha/g, "シャ"], [/shi/g, "シ"],
+    [/shu/g, "シュ"], [/sho/g, "ショ"], [/sh/g, "シュ"], [/cha/g, "チャ"],
+    [/chi/g, "チ"], [/chu/g, "チュ"], [/cho/g, "チョ"], [/ch/g, "チ"],
+    [/tsu/g, "ツ"], [/th/g, "ス"], [/ph/g, "フ"], [/gh/g, "グ"], [/wh/g, "ホ"],
+    [/ck/g, "ック"], [/qu/g, "ク"], [/x/g, "クス"],
+    [/a/g, "ア"], [/i/g, "イ"], [/u/g, "ウ"], [/e/g, "エ"], [/o/g, "オ"],
+    [/ka|ca/g, "カ"], [/ki/g, "キ"], [/ku|cu/g, "ク"], [/ke/g, "ケ"], [/ko|co/g, "コ"]
+  ];
+  // simple syllable builder instead of blind regex soup:
+  const V = { a:"ア", i:"イ", u:"ウ", e:"エ", o:"オ", y:"イ" };
+  const C = {
+    b:"バビブベボ", c:"カシクセコ", d:"ダジヅデド", f:"ファフィフフェフォ",
+    g:"ガギグゲゴ", h:"ハヒフヘホ", j:"ジャジジュジェジョ", k:"カキクケコ",
+    l:"ラリルレロ", m:"マミムメモ", n:"ナニヌネノ", p:"パピプペポ",
+    q:"カキクケコ", r:"ラリルレロ", s:"サシスセソ", t:"タチツテト",
+    v:"バビブベボ", w:"ワウィウウェウォ", z:"ザジズゼゾ"
+  };
+  const idx = { a:0, i:1, u:2, e:3, o:4, y:1 };
+  let out = "", i = 0;
+  const multi = { f:true, j:true, w:true }; // rows stored as multi-char units
+  while (i < s.length) {
+    const c = s[i], nx = s[i+1];
+    if (V[c] && !C[c]) { out += V[c]; i++; continue; }
+    if (C[c]) {
+      if (nx && idx[nx] !== undefined) {
+        const row = C[c];
+        if (multi[c]) {
+          const units = row.match(/.[ィェォ]?/g);
+          out += units[idx[nx]];
+        } else {
+          out += row[idx[nx]];
+        }
+        i += 2; continue;
+      }
+      // consonant with no vowel → default "u" column-ish
+      if (c === "n") { out += "ン"; i++; continue; }
+      if (c === "t") { out += "ト"; i++; continue; }
+      if (c === "d") { out += "ド"; i++; continue; }
+      if (c === "k" || c === "c" || c === "q") { out += "ク"; i++; continue; }
+      if (c === "s") { out += "ス"; i++; continue; }
+      if (c === "r" || c === "l") { out += "ル"; i++; continue; }
+      if (c === "m") { out += "ム"; i++; continue; }
+      if (c === "b" || c === "v") { out += "ブ"; i++; continue; }
+      if (c === "p") { out += "プ"; i++; continue; }
+      if (c === "g") { out += "グ"; i++; continue; }
+      if (c === "f" || c === "h") { out += "フ"; i++; continue; }
+      if (c === "z" || c === "j") { out += "ズ"; i++; continue; }
+      i++; continue;
+    }
+    i++;
+  }
+  return out;
+}
+
+function nameToKana(name) {
+  const key = name.toLowerCase().replace(/[^a-z]/g, "");
+  return NAME_DICT[key] || fallbackToKana(name);
+}
+
+/* ============================================================
+   2. Katakana mora → kanji candidates
+   Each entry: [kanji, english meaning, style]
+   styles: cool / elegant / lucky / funny
+   ============================================================ */
+const KANJI = {
+"ア":[["亜","Asia; timeless","cool"],["愛","love","elegant"],["安","peace","lucky"],["飴","candy","funny"]],
+"イ":[["威","majesty; dignity","cool"],["衣","beautiful robe","elegant"],["伊","Italy; that one","lucky"],["胃","stomach","funny"]],
+"ウ":[["宇","the cosmos","cool"],["羽","feather; wing","elegant"],["卯","rabbit (zodiac)","lucky"],["鵜","cormorant bird","funny"]],
+"エ":[["衛","guardian","cool"],["絵","picture; art","elegant"],["恵","blessing","lucky"],["餌","animal feed","funny"]],
+"オ":[["王","king","cool"],["央","center of all","elegant"],["旺","flourishing","lucky"],["尾","tail","funny"]],
+"カ":[["火","fire","cool"],["華","splendid flower","elegant"],["嘉","auspicious joy","lucky"],["蚊","mosquito","funny"]],
+"キ":[["鬼","demon; fierce spirit","cool"],["貴","noble","elegant"],["喜","delight","lucky"],["木","tree","funny"]],
+"ク":[["駆","gallop","cool"],["玖","black jewel","elegant"],["久","everlasting","lucky"],["躯","body","funny"]],
+"ケ":[["気","spirit; energy","cool"],["華","flower (rare reading)","elegant"],["慶","jubilation","lucky"],["毛","hair; fur","funny"]],
+"コ":[["虎","tiger","cool"],["心","heart","elegant"],["幸","happiness","lucky"],["粉","powder; flour","funny"]],
+"サ":[["冴","sharp brilliance","cool"],["桜","cherry blossom","elegant"],["幸","good fortune","lucky"],["砂","sand","funny"]],
+"シ":[["獅","lion","cool"],["詩","poetry","elegant"],["紫","noble purple","lucky"],["塩","salt","funny"]],
+"ス":[["守","protector","cool"],["澄","clear; serene","elegant"],["寿","longevity","lucky"],["酢","vinegar","funny"]],
+"セ":[["瀬","river rapids","cool"],["聖","holy; saint","elegant"],["勢","vigor; momentum","lucky"],["背","one's back","funny"]],
+"ソ":[["蒼","deep blue","cool"],["想","deep thought","elegant"],["祖","honored ancestor","lucky"],["噌","miso paste","funny"]],
+"タ":[["太","grand; bold","cool"],["汰","select the finest","elegant"],["鯛","sea bream (lucky fish)","lucky"],["田","rice paddy","funny"]],
+"チ":[["智","wisdom","cool"],["稚","innocent charm","elegant"],["千","one thousand","lucky"],["血","blood","funny"]],
+"ツ":[["剣","sword (rare reading)","cool"],["都","the capital","elegant"],["通","connoisseur","lucky"],["津","harbor","funny"]],
+"テ":[["帝","emperor","cool"],["天","heaven","elegant"],["照","shining light","lucky"],["手","hand","funny"]],
+"ト":[["斗","the Big Dipper","cool"],["翔","soar high","elegant"],["富","wealth","lucky"],["兎","rabbit","funny"]],
+"ナ":[["那","graceful; elegant","cool"],["菜","fresh greens","elegant"],["納","bring in wealth","lucky"],["茄","eggplant","funny"]],
+"ニ":[["仁","benevolence","cool"],["虹","rainbow","elegant"],["二","two; double luck","lucky"],["荷","luggage","funny"]],
+"ヌ":[["縫","weave together","cool"],["布","fine cloth","elegant"],["瑞","auspicious omen","lucky"],["沼","swamp","funny"]],
+"ネ":[["音","sound; echo","cool"],["寧","serenity","elegant"],["願","a wish granted","lucky"],["猫","cat","funny"]],
+"ノ":[["乃","classical elegance","cool"],["野","open field","elegant"],["能","talent","lucky"],["脳","brain","funny"]],
+"ハ":[["覇","supremacy","cool"],["羽","wings","elegant"],["晴","clear skies","lucky"],["歯","tooth","funny"]],
+"ヒ":[["飛","flight","cool"],["妃","princess","elegant"],["陽","sunshine","lucky"],["肘","elbow","funny"]],
+"フ":[["風","wind","cool"],["譜","music score","elegant"],["富","fortune","lucky"],["麩","wheat gluten","funny"]],
+"ヘ":[["兵","warrior","cool"],["碧","jade blue","elegant"],["平","peace","lucky"],["蛇","snake","funny"]],
+"ホ":[["鳳","phoenix","cool"],["穂","ear of golden rice","elegant"],["宝","treasure","lucky"],["帆","sail","funny"]],
+"マ":[["魔","sorcery; mystic power","cool"],["舞","dance","elegant"],["万","ten thousand fortunes","lucky"],["馬","horse","funny"]],
+"ミ":[["魅","fascination","cool"],["美","beauty","elegant"],["実","bearing fruit","lucky"],["味","flavor","funny"]],
+"ム":[["武","warrior","cool"],["夢","dream","elegant"],["椋","mighty tree","lucky"],["無","nothingness (zen)","funny"]],
+"メ":[["冥","the mystic deep","cool"],["芽","new sprout","elegant"],["恵","blessing","lucky"],["目","eye","funny"]],
+"モ":[["猛","fierce","cool"],["桃","peach blossom","elegant"],["百","one hundred blessings","lucky"],["藻","seaweed","funny"]],
+"ヤ":[["矢","arrow","cool"],["弥","ever more","elegant"],["八","eight (lucky number)","lucky"],["夜","night","funny"]],
+"ユ":[["勇","courage","cool"],["優","gentle grace","elegant"],["結","bonds of fortune","lucky"],["湯","hot bath","funny"]],
+"ヨ":[["夜","night","cool"],["世","the world","elegant"],["陽","sunlight","lucky"],["酔","tipsy","funny"]],
+"ラ":[["雷","thunder","cool"],["蘭","orchid","elegant"],["楽","joy","lucky"],["螺","spiral shell","funny"]],
+"リ":[["李","plum warrior","cool"],["璃","lapis lazuli","elegant"],["利","prosperity","lucky"],["梨","pear","funny"]],
+"ル":[["流","flowing style","cool"],["瑠","sapphire","elegant"],["留","good things remain","lucky"],["瘤","lump","funny"]],
+"レ":[["烈","fierce; intense","cool"],["麗","lovely; resplendent","elegant"],["礼","grace; courtesy","lucky"],["蓮","lotus","funny"]],
+"ロ":[["狼","wolf","cool"],["露","morning dew","elegant"],["禄","prosperity","lucky"],["呂","bathtub","funny"]],
+"ワ":[["環","great ring; cosmos","cool"],["輪","circle of harmony","elegant"],["和","harmony; Japan","lucky"],["笑","laughter","funny"]],
+"ン":[["刃","blade (silent n)","cool"],["音","lingering echo","elegant"],["運","luck itself","lucky"],["ん","just n","funny"]],
+"ガ":[["牙","fang","cool"],["雅","refined elegance","elegant"],["賀","celebration","lucky"],["蛾","moth","funny"]],
+"ギ":[["義","righteousness","cool"],["妓","artistic performer","elegant"],["宜","all goes well","lucky"],["戯","playfulness","funny"]],
+"グ":[["軍","army","cool"],["紅","crimson (rare)","elegant"],["遇","fortunate meeting","lucky"],["具","tool; topping","funny"]],
+"ゲ":[["月","the moon","cool"],["芸","fine art","elegant"],["現","manifestation","lucky"],["下","down under","funny"]],
+"ゴ":[["豪","mighty; magnificent","cool"],["悟","enlightenment","elegant"],["五","five blessings","lucky"],["碁","board game Go","funny"]],
+"ザ":[["座","throne","cool"],["坐","zen sitting","elegant"],["財","wealth","lucky"],["雑","miscellaneous","funny"]],
+"ジ":[["侍","samurai","cool"],["慈","compassion","elegant"],["治","peaceful reign","lucky"],["字","a letter","funny"]],
+"ズ":[["逗","dwelling deep","cool"],["瑞","auspicious sign","elegant"],["図","grand design","lucky"],["頭","head","funny"]],
+"ゼ":[["是","absolute truth","cool"],["禅","zen","elegant"],["善","goodness","lucky"],["銭","small change","funny"]],
+"ゾ":[["蔵","hidden treasury","cool"],["造","master creation","elegant"],["増","ever increasing","lucky"],["象","elephant","funny"]],
+"ダ":[["打","striking blow","cool"],["蛇","serpent","elegant"],["陀","buddha's calm","lucky"],["駄","no good","funny"]],
+"デ":[["伝","legend","cool"],["出","rising forth","elegant"],["天","heaven (voiced)","lucky"],["泥","mud","funny"]],
+"ド":[["怒","fury","cool"],["道","the Way","elegant"],["土","fertile earth","lucky"],["丼","rice bowl","funny"]],
+"バ":[["罵","battle cry","cool"],["芭","banana leaf (poetic)","elegant"],["場","one's place to shine","lucky"],["馬","horse","funny"]],
+"ビ":[["尾","comet's tail","cool"],["美","beauty","elegant"],["備","ever prepared","lucky"],["鼻","nose","funny"]],
+"ブ":[["武","warrior","cool"],["舞","dance","elegant"],["福","good fortune (rare)","lucky"],["蕪","turnip","funny"]],
+"ベ":[["辺","far frontier","cool"],["紅","crimson","elegant"],["米","rice; abundance","lucky"],["屁","(ahem) wind","funny"]],
+"ボ":[["墨","ink of the masters","cool"],["慕","adored","elegant"],["望","hope","lucky"],["帽","hat","funny"]],
+"パ":[["覇","supremacy","cool"],["琶","biwa lute","elegant"],["派","grand faction","lucky"],["波","wave","funny"]],
+"ピ":[["飛","flight","cool"],["妃","princess","elegant"],["陽","sunshine","lucky"],["火","fire","funny"]],
+"プ":[["風","wind","cool"],["楓","maple","elegant"],["富","fortune","lucky"],["腐","fermented (tofu!)","funny"]],
+"ペ":[["兵","soldier","cool"],["碧","jade","elegant"],["平","peace","lucky"],["ペ","just pe","funny"]],
+"ポ":[["鳳","phoenix","cool"],["穂","golden rice","elegant"],["宝","treasure","lucky"],["歩","a humble pawn","funny"]]
+};
+
+/* Youon (combined sounds) */
+const YOUON = {
+"キャ":[["脚","strong legs","cool"],["伽","enchanted tale","elegant"],["嘉","auspicious","lucky"],["客","guest","funny"]],
+"キュ":[["球","the sphere; the globe","cool"],["宮","palace","elegant"],["久","everlasting","lucky"],["九","nine","funny"]],
+"キョ":[["峡","great gorge","cool"],["京","the capital","elegant"],["興","prosperity","lucky"],["巨","giant","funny"]],
+"シャ":[["射","piercing shot","cool"],["紗","silk gauze","elegant"],["社","shrine","lucky"],["車","car","funny"]],
+"シュ":[["主","the master","cool"],["珠","pearl","elegant"],["寿","longevity","lucky"],["酒","sake","funny"]],
+"ショ":[["勝","victory (rare)","cool"],["緒","beginning of all","elegant"],["祥","good omen","lucky"],["書","calligraphy","funny"]],
+"ジャ":[["蛇","serpent","cool"],["麝","musk deer","elegant"],["寂","refined stillness","lucky"],["邪","wicked","funny"]],
+"ジュ":[["獣","wild beast","cool"],["樹","great tree","elegant"],["寿","longevity","lucky"],["呪","a spell","funny"]],
+"ジョ":[["城","castle","cool"],["嬢","noble lady","elegant"],["恕","generous heart","lucky"],["醸","brewing","funny"]],
+"チャ":[["茶","tea ceremony","elegant"],["茶","tea","funny"]],
+"チュ":[["宙","outer space","cool"],["昼","midday sun","elegant"],["忠","loyalty","lucky"],["注","pour it in","funny"]],
+"チョ":[["蝶","butterfly","elegant"],["長","the chief","cool"],["兆","a trillion","lucky"],["貯","savings","funny"]],
+"ニャ":[["若","youthful (rare)","elegant"],["猫","cat-sound nya","funny"]],
+"ヒャ":[["百","one hundred","lucky"],["百","hundred","funny"]],
+"ビャ":[["白","pure white","elegant"],["白","white","cool"]],
+"リャ":[["略","master strategy","cool"],["涼","cool breeze (rare)","elegant"]],
+"リュ":[["龍","dragon","cool"],["琉","precious gem","elegant"],["隆","prosperity","lucky"],["流","going with the flow","funny"]],
+"リョ":[["凌","surpass all","cool"],["良","goodness","elegant"],["料","cooking","funny"]],
+"ギャ":[["牙","fang (voiced)","cool"],["伽","enchanted","elegant"]],
+"ギュ":[["牛","ox; beef","funny"],["牛","mighty ox","cool"]],
+"ギョ":[["御","honored one","elegant"],["魚","fish","funny"]],
+"ミャ":[["妙","exquisite","elegant"],["脈","pulse","funny"]],
+"ミュ":[["妙","exquisite (approx.)","elegant"],["謬","enigma","cool"]],
+"ファ":[["風","wind (fa!)","cool"],["花","flower (approx.)","elegant"],["富","fortune","lucky"],["譜","score","funny"]],
+"フィ":[["飛","flight (approx.)","cool"],["妃","princess","elegant"],["斐","beautiful pattern","lucky"]],
+"フェ":[["風","wind","cool"],["笛","flute","elegant"]],
+"フォ":[["鳳","phoenix (approx.)","cool"],["峰","summit","elegant"],["宝","treasure","lucky"]],
+"ウィ":[["威","majesty","cool"],["初","first; unique","elegant"],["祝","celebration (approx.)","lucky"]],
+"ウェ":[["笑","smile (approx.)","funny"],["恵","blessing","lucky"],["衛","guard","cool"]],
+"ウォ":[["雄","hero (approx.)","cool"],["和","harmony","lucky"]],
+"ヴァ":[["覇","supremacy (approx.)","cool"],["華","flower","elegant"]],
+"ティ":[["帝","emperor","cool"],["禎","auspicious","lucky"],["笛","flute (approx.)","elegant"]],
+"ディ":[["帝","emperor (voiced)","cool"],["泥","mud","funny"],["伝","legend","elegant"]],
+"デュ":[["獣","beast (approx.)","cool"],["樹","great tree","elegant"]],
+"トゥ":[["斗","dipper","cool"],["富","wealth","lucky"]],
+"シェ":[["宣","proclaim (approx.)","cool"],["紗","silk","elegant"]],
+"ジェ":[["慈","compassion (approx.)","elegant"],["樹","tree","cool"],["恵","blessing","lucky"],["ジェ","just je","funny"]],
+"チェ":[["知","knowing (approx.)","cool"],["茶","tea","funny"]]
+};
+
+/* ============================================================
+   3. Mora parsing & generation
+   ============================================================ */
+const SMALL = "ャュョァィゥェォヮ";
+
+function parseMorae(kana) {
+  const morae = [];
+  const chars = [...kana.replace(/\s+/g, "・")];
+  for (let i = 0; i < chars.length; i++) {
+    const c = chars[i];
+    if (c === "ー" || c === "ッ" || c === "・" || c === "、") {
+      if (c === "・") morae.push({ sep: true });
+      continue;
+    }
+    let unit = c;
+    if (chars[i+1] && SMALL.includes(chars[i+1])) {
+      unit = c + chars[i+1];
+      i++;
+    }
+    morae.push({ kana: unit });
+  }
+  return morae;
+}
+
+function candidatesFor(unit) {
+  if (unit.length === 2) {
+    if (YOUON[unit]) return YOUON[unit];
+    // promote small vowel to full vowel and combine? fall back to base char
+    const base = unit[0];
+    if (KANJI[base]) return KANJI[base];
+    return [[unit, "(sound)", "cool"]];
+  }
+  if (KANJI[unit]) return KANJI[unit];
+  // small vowels standing alone → full vowel
+  const promote = { "ァ":"ア","ィ":"イ","ゥ":"ウ","ェ":"エ","ォ":"オ" };
+  if (promote[unit] && KANJI[promote[unit]]) return KANJI[promote[unit]];
+  return [[unit, "(sound)", "cool"]];
+}
+
+function pick(cands, style, random) {
+  const styled = cands.filter(c => c[2] === style);
+  const pool = styled.length ? styled : cands;
+  if (random) return pool[Math.floor(Math.random() * pool.length)];
+  return pool[0];
+}
+
+let current = []; // [{kana, kanji, meaning} or {sep:true}]
+let currentStyle = "cool";
+
+function generate(random) {
+  const kana = document.getElementById("kanaInput").value.trim();
+  if (!kana) return;
+  current = parseMorae(kana).map(m => {
+    if (m.sep) return m;
+    const c = pick(candidatesFor(m.kana), currentStyle, random);
+    return { kana: m.kana, kanji: c[0], meaning: c[1] };
+  });
+  render();
+}
+
+function swapAt(index) {
+  const m = current[index];
+  if (!m || m.sep) return;
+  const cands = candidatesFor(m.kana);
+  const i = cands.findIndex(c => c[0] === m.kanji);
+  const next = cands[(i + 1) % cands.length];
+  m.kanji = next[0];
+  m.meaning = next[1];
+  render();
+}
+
+function render() {
+  const result = document.getElementById("result");
+  result.style.display = "block";
+  const name = current.map(m => m.sep ? "　" : m.kanji).join("");
+  const kana = current.map(m => m.sep ? "　" : m.kana).join("");
+  document.getElementById("certName").textContent = name;
+  document.getElementById("certKana").textContent = kana;
+
+  const box = document.getElementById("meanings");
+  box.innerHTML = "";
+  current.forEach((m, i) => {
+    if (m.sep) return;
+    const row = document.createElement("div");
+    row.className = "meaning-row";
+    row.innerHTML = `<span class="k">${m.kanji}</span><span class="r">${m.kana}</span>` +
+      `<span class="m">${m.meaning}</span>` +
+      `<button class="swap" data-i="${i}">変 swap</button>`;
+    box.appendChild(row);
+  });
+  box.querySelectorAll(".swap").forEach(b =>
+    b.addEventListener("click", () => swapAt(+b.dataset.i)));
+
+  const meanings = current.filter(m => !m.sep).map(m => m.meaning.split(";")[0]);
+  const sentence = meanings.length >= 2
+    ? `“A name of ${meanings[0]} and ${meanings[1]}” — ${meanings.join(" · ")}`
+    : meanings.join(" · ");
+  document.getElementById("nameSentence").textContent = sentence;
+  result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+/* ============================================================
+   4. Wiring
+   ============================================================ */
+function syncKana() {
+  const f = document.getElementById("firstName").value.trim();
+  const l = document.getElementById("lastName").value.trim();
+  const parts = [];
+  if (f) parts.push(nameToKana(f));
+  if (l) parts.push(nameToKana(l));
+  document.getElementById("kanaInput").value = parts.join("・");
+}
+document.getElementById("firstName").addEventListener("input", syncKana);
+document.getElementById("lastName").addEventListener("input", syncKana);
+
+document.getElementById("styleTabs").addEventListener("click", e => {
+  const btn = e.target.closest(".style-btn");
+  if (!btn) return;
+  document.querySelectorAll(".style-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentStyle = btn.dataset.style;
+  if (current.length) generate(false);
+});
+
+document.getElementById("generateBtn").addEventListener("click", () => generate(false));
+document.getElementById("shuffleBtn").addEventListener("click", () => generate(true));
+
+/* PNG download: draw certificate on canvas */
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  if (!current.length) return;
+  const cv = document.getElementById("dlCanvas");
+  const ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height;
+  // paper
+  ctx.fillStyle = "#f7f1e3";
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = "#b8963e";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(28, 28, W - 56, H - 56);
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(40, 40, W - 80, H - 80);
+  // title (vertical, right side)
+  ctx.fillStyle = "#b8963e";
+  ctx.font = "28px serif";
+  const title = "命名之証";
+  [...title].forEach((ch, i) => ctx.fillText(ch, W - 100, 110 + i * 36));
+  // main name vertical center
+  const units = current.filter(m => !m.sep);
+  const n = units.length;
+  const size = Math.min(110, Math.floor((H - 260) / n));
+  ctx.fillStyle = "#2b2620";
+  ctx.font = `600 ${size}px serif`;
+  ctx.textAlign = "center";
+  const startY = (H - n * (size + 10)) / 2 + size;
+  units.forEach((m, i) => {
+    ctx.fillText(m.kanji, W / 2, startY + i * (size + 10));
+  });
+  // kana (vertical, left)
+  ctx.font = "22px serif";
+  ctx.fillStyle = "#8a7d66";
+  units.forEach((m, i) => {
+    [...m.kana].forEach((ch, j) => {
+      ctx.fillText(ch, 100, 130 + (i * 1.4 + j) * 34);
+    });
+  });
+  // seal
+  ctx.strokeStyle = "#c73e2d";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(W - 130, H - 160, 70, 70);
+  ctx.fillStyle = "#c73e2d";
+  ctx.font = "24px serif";
+  ctx.fillText("姫", W - 95, H - 130);
+  ctx.fillText("路", W - 95, H - 104);
+  // meanings footer
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#5a5142";
+  ctx.font = "italic 20px serif";
+  const meanings = units.map(m => m.meaning.split(";")[0]).join(" · ");
+  ctx.fillText(meanings.slice(0, 60), W / 2, H - 70);
+
+  const a = document.createElement("a");
+  a.download = "my-kanji-name.png";
+  a.href = cv.toDataURL("image/png");
+  a.click();
+});
+
+/* demo default */
+document.getElementById("firstName").value = "Michael";
+document.getElementById("lastName").value = "Smith";
+syncKana();
+</script>
+</body>
+</html>
