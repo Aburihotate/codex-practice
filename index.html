@@ -348,6 +348,110 @@
   .wp-chip.t-vermilion.active { background: #9e2f21; color: #f7ecd9; border-color: #9e2f21; }
   .dl-buttons { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
 
+  /* ---- Premium / Deluxe ---- */
+  .wp-chip .lock { font-size: .7rem; margin-left: .2em; }
+  .wp-chip.t-sakura.active { background: #f4c6d0; color: #43272f; border-color: #c9506f; }
+  .wp-chip.t-gold.active { background: #0f0c08; color: #e2bd57; border-color: #e2bd57; }
+  .wp-chip.t-indigo.active { background: #1c2b4d; color: #f2ecda; border-color: #1c2b4d; }
+  .deluxe {
+    border: 1.5px solid var(--gold);
+    background: linear-gradient(160deg, #fffdf6, #f8f0da);
+  }
+  .deluxe-head { display: flex; align-items: baseline; gap: .9rem; flex-wrap: wrap; }
+  .deluxe-head h2 { font-size: 1.15rem; letter-spacing: .12em; }
+  .deluxe-head .jp { color: var(--vermilion); }
+  .price {
+    font-size: 1.3rem;
+    color: var(--vermilion);
+    font-weight: 600;
+  }
+  .price .once { font-size: .75rem; color: #8a7d66; font-weight: 400; }
+  .badge-premium {
+    display: none;
+    background: var(--gold);
+    color: #fff;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    border-radius: 999px;
+    padding: .25rem .8rem;
+  }
+  .deluxe ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: .45rem 1rem;
+    margin: 1rem 0 .4rem;
+  }
+  .deluxe li { font-size: .92rem; color: #4d453a; }
+  .deluxe li::before { content: "✦ "; color: var(--gold); }
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(30,25,18,.55);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 50; padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fffdf8;
+    border: 1.5px solid var(--gold);
+    border-radius: 12px;
+    max-width: 420px; width: 100%;
+    padding: 1.6rem;
+    box-shadow: 0 12px 40px rgba(40,30,15,.25);
+  }
+  .modal h3 { font-size: 1.15rem; letter-spacing: .08em; }
+  .modal p { font-size: .88rem; color: #6b6154; margin: .7rem 0; line-height: 1.55; }
+  .modal .actions { flex-direction: column; align-items: stretch; }
+  .modal .actions button { width: 100%; }
+  .modal .fineprint { font-size: .72rem; color: #9a8f7c; margin-top: .8rem; }
+
+  /* ---- Story ---- */
+  .story {
+    margin-top: 1.1rem;
+    font-size: .97rem;
+    line-height: 1.75;
+    color: #4d453a;
+    background: var(--paper);
+    border: 1px solid #e8dfc9;
+    border-radius: 8px;
+    padding: 1rem 1.3rem;
+  }
+  .story .story-label {
+    display: block;
+    font-size: .72rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: #8a7d66;
+    margin-bottom: .4rem;
+  }
+
+  /* ---- Info sections ---- */
+  .info h2 {
+    font-size: 1rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: #8a7d66;
+    margin-bottom: .8rem;
+  }
+  .howto-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .howto-steps .step { font-size: .9rem; color: #4d453a; line-height: 1.6; }
+  .howto-steps .step b { display: block; color: var(--ink); margin-bottom: .2rem; }
+  .faq details {
+    border-bottom: 1px dashed #d4c7a8;
+    padding: .6rem 0;
+    font-size: .92rem;
+    color: #4d453a;
+  }
+  .faq summary { cursor: pointer; color: var(--ink); }
+  .faq details p { margin-top: .5rem; line-height: 1.6; color: #6b6154; }
+
+  #petalCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+
   /* ---- Shop teaser ---- */
   .teaser {
     text-align: center;
@@ -424,6 +528,7 @@
       <div class="meanings" id="meanings"></div>
     </div>
     <div class="name-sentence" id="nameSentence"></div>
+    <div class="story" id="storyBox"></div>
     <div class="space-note">Tap 変 on any character to swap it for another kanji with the same sound.</div>
 
     <div class="stats">
@@ -438,15 +543,67 @@
         <button class="wp-chip t-ink active" data-theme="ink">墨 Ink</button>
         <button class="wp-chip t-paper" data-theme="paper">和紙 Washi</button>
         <button class="wp-chip t-vermilion" data-theme="vermilion">朱 Vermilion</button>
+        <button class="wp-chip t-sakura" data-theme="sakura" data-premium="1">桜 Sakura<span class="lock">🔒</span></button>
+        <button class="wp-chip t-gold" data-theme="gold" data-premium="1">金 Gold Leaf<span class="lock">🔒</span></button>
+        <button class="wp-chip t-indigo" data-theme="indigo" data-premium="1">藍 Indigo Wave<span class="lock">🔒</span></button>
       </div>
       <div class="dl-buttons">
         <button class="secondary" id="wallpaperBtn">📱 Phone Wallpaper 壁紙</button>
         <button class="secondary" id="downloadBtn">Certificate 命名書</button>
+        <button class="secondary" id="scrollBtn">Story Scroll 絵巻<span id="scrollLock">🔒</span></button>
         <button class="secondary" id="shareBtn">Share 共有</button>
         <button class="secondary" id="linkBtn">Copy Link</button>
       </div>
       <div class="space-note">Wallpaper is sized for your phone — the kanji sits below the clock.</div>
     </div>
+  </div>
+
+  <div class="panel deluxe" id="deluxePanel">
+    <div class="deluxe-head">
+      <h2>✦ DELUXE PACK <span class="jp">特上</span></h2>
+      <span class="price" id="priceTag">¥600 <span class="once">one-time</span></span>
+      <span class="badge-premium" id="premiumBadge">✦ UNLOCKED</span>
+    </div>
+    <ul>
+      <li>3 exclusive wallpaper themes — Sakura 桜, Gold Leaf 金箔, Indigo Wave 藍</li>
+      <li>No watermark on any wallpaper</li>
+      <li>High-resolution certificate with ornate border (print-ready)</li>
+      <li>Your personal <em>Name Story</em> scroll — a legend written just for your name</li>
+      <li>Works forever on this device · supports a tiny team in Himeji ♥</li>
+    </ul>
+    <div class="actions">
+      <button class="primary" id="unlockBtn">Unlock Deluxe ✦</button>
+      <button class="secondary" id="codeBtn">I have a code</button>
+    </div>
+  </div>
+
+  <div class="panel info howto">
+    <h2>How it works</h2>
+    <div class="howto-steps">
+      <div class="step"><b>1 · Sound 音</b>Your name is converted to Japanese sounds (katakana), the same way Japan writes every foreign name.</div>
+      <div class="step"><b>2 · Ateji 当て字</b>Each sound is matched to a real kanji — the centuries-old art of phonetic kanji spelling once used for foreign words.</div>
+      <div class="step"><b>3 · Meaning 意味</b>Each kanji carries its own meaning, so your name becomes a tiny poem. Swap characters until it feels like you.</div>
+    </div>
+  </div>
+
+  <div class="panel info faq">
+    <h2>Questions</h2>
+    <details>
+      <summary>Is this a real Japanese name?</summary>
+      <p>It's a real <em>ateji</em> — authentic kanji chosen for their sound, the same technique historical Japan used to write foreign words (America = 亜米利加!). It's playful, not official, and every kanji is real and readable.</p>
+    </details>
+    <details>
+      <summary>Could my name mean something bad?</summary>
+      <p>No. Kanji with negative meanings (death, sickness, insults) are excluded from the generator. The Funny style keeps it gentle — think "eggplant", never anything mean.</p>
+    </details>
+    <details>
+      <summary>What do I get with Deluxe?</summary>
+      <p>Three exclusive wallpaper themes, watermark-free downloads, a print-ready high-resolution certificate, and a personal Name Story scroll. One payment, this device, forever.</p>
+    </details>
+    <details>
+      <summary>Can I get it printed or as a hanko stamp?</summary>
+      <p>Physical goods — framed certificates, hand-carved hanko stamps, master calligraphy shipped from Himeji — are coming soon. The Deluxe certificate is print-ready if you can't wait.</p>
+    </details>
   </div>
 
   <div class="panel teaser">
@@ -457,6 +614,22 @@
   </div>
 </main>
 
+<div class="modal-overlay" id="payModal">
+  <div class="modal">
+    <h3>✦ Deluxe Pack — <span id="modalPrice">¥600</span></h3>
+    <p>Unlock the Sakura, Gold Leaf &amp; Indigo themes, watermark-free wallpapers,
+       the print-ready HD certificate and your personal Name Story scroll.
+       One-time payment for this device.</p>
+    <div class="actions">
+      <button class="primary" id="payBtn">Pay with card →</button>
+      <button class="secondary" id="modalCodeBtn">Enter unlock code</button>
+      <button class="secondary" id="modalClose">Not now</button>
+    </div>
+    <p class="fineprint">Payment is processed securely by Stripe. After checkout you'll return here and everything unlocks automatically.</p>
+  </div>
+</div>
+<canvas id="petalCanvas"></canvas>
+
 <footer>
   Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Kanji chosen phonetically (ateji 当て字), just like Japanese did for foreign words for centuries.
 </footer>
@@ -464,6 +637,36 @@
 <canvas id="dlCanvas" width="720" height="1080" style="display:none"></canvas>
 
 <script>
+/* ============================================================
+   0. Monetization config — edit these 4 lines to go live
+   ============================================================
+   1) Create a Stripe Payment Link (dashboard.stripe.com → Payment Links)
+      for a one-time ¥600 product "Deluxe Pack".
+   2) Set its confirmation redirect to:  https://<your-site>/?unlock=HIMEJI-OMIYAGE
+   3) Paste the payment link URL below. Done — no backend needed.
+   Buyers can also type the code manually (put it on the receipt).  */
+const CONFIG = {
+  stripeLink: "",                    // e.g. "https://buy.stripe.com/xxxx"
+  price: "¥600",
+  unlockCode: "HIMEJI-OMIYAGE",      // manual/receipt unlock code
+  tipLink: ""                        // optional: Ko-fi / Buy Me a Coffee URL
+};
+
+let premium = false;
+try { premium = localStorage.getItem("knPremium") === "1"; } catch (e) {}
+function setPremium(v) {
+  premium = v;
+  try { if (v) localStorage.setItem("knPremium", "1"); } catch (e) {}
+  refreshPremiumUI();
+}
+function refreshPremiumUI() {
+  document.getElementById("premiumBadge").style.display = premium ? "inline-block" : "none";
+  document.getElementById("unlockBtn").style.display = premium ? "none" : "";
+  document.getElementById("codeBtn").style.display = premium ? "none" : "";
+  document.querySelectorAll(".wp-chip .lock").forEach(l => l.style.display = premium ? "none" : "");
+  document.getElementById("scrollLock").style.display = premium ? "none" : "";
+}
+
 /* ============================================================
    1. Name → Katakana
    ============================================================ */
@@ -871,6 +1074,8 @@ function render() {
     ? `“A name of ${meanings[0]} and ${meanings[1]}” — ${meanings.join(" · ")}`
     : meanings.join(" · ");
   document.getElementById("nameSentence").textContent = sentence;
+  document.getElementById("storyBox").innerHTML =
+    `<span class="story-label">Your name story 名前物語</span>${nameStory()}`;
   renderStats(name.replace(/\s/g, ""));
 }
 
@@ -879,8 +1084,11 @@ function render() {
    ============================================================ */
 function drawCertificate() {
   const cv = document.getElementById("dlCanvas");
+  const s = premium ? 2 : 1;            // deluxe: print-ready 2x resolution
+  cv.width = 720 * s; cv.height = 1080 * s;
   const ctx = cv.getContext("2d");
-  const W = cv.width, H = cv.height;
+  ctx.scale(s, s);
+  const W = 720, H = 1080;
   ctx.fillStyle = "#f7f1e3";
   ctx.fillRect(0, 0, W, H);
   ctx.strokeStyle = "#b8963e";
@@ -888,6 +1096,16 @@ function drawCertificate() {
   ctx.strokeRect(28, 28, W - 56, H - 56);
   ctx.lineWidth = 1.5;
   ctx.strokeRect(40, 40, W - 80, H - 80);
+  if (premium) {                        // ornate corner brackets
+    ctx.lineWidth = 2.5;
+    const c = 30;
+    [[56, 56, 1, 1], [W - 56, 56, -1, 1], [56, H - 56, 1, -1], [W - 56, H - 56, -1, -1]]
+      .forEach(([x, y, dx, dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(x + dx * c, y); ctx.lineTo(x, y); ctx.lineTo(x, y + dy * c);
+        ctx.stroke();
+      });
+  }
   ctx.fillStyle = "#b8963e";
   ctx.font = "28px serif";
   ctx.textAlign = "left";
@@ -930,8 +1148,51 @@ function drawCertificate() {
 const WP_THEMES = {
   ink:       { bg:"#16130f", ink:"#f0e8d8", sub:"#7d7466", accent:"#d4553f", wave:"rgba(240,232,216,.045)" },
   paper:     { bg:"#f7f1e3", ink:"#2b2620", sub:"#9a8f7c", accent:"#c73e2d", wave:"rgba(43,38,32,.05)" },
-  vermilion: { bg:"#9e2f21", ink:"#f7ecd9", sub:"#e0b9a8", accent:"#f7ecd9", wave:"rgba(247,236,217,.07)" }
+  vermilion: { bg:"#9e2f21", ink:"#f7ecd9", sub:"#e0b9a8", accent:"#f7ecd9", wave:"rgba(247,236,217,.07)" },
+  sakura:    { bg:"#fbe9ee", ink:"#43272f", sub:"#b58996", accent:"#c9506f", wave:"rgba(201,80,111,.05)",
+               decor:"sakura", premium:true },
+  gold:      { bg:"#0f0c08", ink:"#e2bd57", sub:"#8a7a55", accent:"#e2bd57", wave:"rgba(226,189,87,.05)",
+               decor:"speckle", premium:true, grad:["#f7e49a","#c9992e","#f2d475"] },
+  indigo:    { bg:"#1c2b4d", ink:"#f2ecda", sub:"#93a3c6", accent:"#e3c46e", wave:"rgba(242,236,218,.10)",
+               decor:"bigwave", premium:true }
 };
+
+function drawThemeDecor(ctx, W, H, t) {
+  if (t.decor === "sakura") {
+    // drifting petals
+    for (let i = 0; i < 46; i++) {
+      const x = Math.random() * W, y = Math.random() * H;
+      const s = 10 + Math.random() * 22, a = Math.random() * Math.PI;
+      ctx.save();
+      ctx.translate(x, y); ctx.rotate(a);
+      ctx.globalAlpha = 0.16 + Math.random() * 0.22;
+      ctx.fillStyle = ["#f2b8c6", "#e89cb0", "#f7d4dd"][i % 3];
+      ctx.beginPath();
+      ctx.moveTo(0, -s);
+      ctx.bezierCurveTo(s * .8, -s * .4, s * .6, s * .6, 0, s * .55);
+      ctx.bezierCurveTo(-s * .6, s * .6, -s * .8, -s * .4, 0, -s);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  } else if (t.decor === "speckle") {
+    // gold-leaf flakes
+    for (let i = 0; i < 260; i++) {
+      const x = Math.random() * W, y = Math.random() * H;
+      const s = 1 + Math.random() * 5;
+      ctx.globalAlpha = 0.06 + Math.random() * 0.25;
+      ctx.fillStyle = ["#e2bd57", "#f7e49a", "#a8842e"][i % 3];
+      ctx.fillRect(x, y, s, s);
+    }
+    ctx.globalAlpha = 1;
+  } else if (t.decor === "bigwave") {
+    // seigaiha band across the top too
+    ctx.save();
+    ctx.translate(0, -H + 700);
+    drawSeigaiha(ctx, W, H, t.wave);
+    ctx.restore();
+  }
+}
 
 function drawSeigaiha(ctx, W, H, color) {
   // overlapping wave arcs, subtle, bottom of screen
@@ -960,6 +1221,7 @@ function drawWallpaper(themeName) {
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
   drawSeigaiha(ctx, W, H, t.wave);
+  drawThemeDecor(ctx, W, H, t);
 
   const units = current.filter(m => !m.sep);
   const n = units.length;
@@ -986,13 +1248,19 @@ function drawWallpaper(themeName) {
   const size = Math.min(200, Math.floor((areaBottom - areaTop) / maxLen) - gap);
   const colW = cols.length > 1 ? size * 1.75 : size * 1.35; // room for kana ruby between columns
   const startX = W / 2 + (cols.length - 1) * colW / 2;
+  let inkFill = t.ink;
+  if (t.grad) {
+    const g = ctx.createLinearGradient(0, areaTop, 0, areaBottom);
+    g.addColorStop(0, t.grad[0]); g.addColorStop(.5, t.grad[1]); g.addColorStop(1, t.grad[2]);
+    inkFill = g;
+  }
   ctx.font = `600 ${size}px serif`;
   ctx.textAlign = "center";
   cols.forEach((col, ci) => {
     const x = startX - ci * colW;
     const totalH = col.length * (size + gap);
     const startY = areaTop + (areaBottom - areaTop - totalH) / 2 + size;
-    ctx.fillStyle = t.ink;
+    ctx.fillStyle = inkFill;
     col.forEach((m, i) => ctx.fillText(m.kanji, x, startY + i * (size + gap)));
     // kana ruby to the right of each column
     ctx.fillStyle = t.sub;
@@ -1027,10 +1295,94 @@ function drawWallpaper(themeName) {
   } else {
     ctx.fillText(meanings, W / 2, H - 220);
   }
-  ctx.globalAlpha = 0.55;
-  ctx.font = "26px serif";
+  ctx.globalAlpha = premium ? 0.5 : 0.8;
+  ctx.font = premium ? "26px serif" : "30px serif";
   ctx.fillText("漢字命名所 · KANJI NAME", W / 2, H - 150);
+  if (!premium) {
+    ctx.font = "22px serif";
+    ctx.fillText("free edition ✦ deluxe removes this", W / 2, H - 106);
+  }
   ctx.globalAlpha = 1;
+  return cv;
+}
+
+/* ---- Name story ---- */
+function storyParams() {
+  const units = current.filter(m => !m.sep);
+  const ms = units.map(m => m.meaning.split(";")[0]).filter(m => m !== "(sound)");
+  return {
+    kanji: units.map(m => m.kanji).join(""),
+    kana: units.map(m => m.kana).join(""),
+    list: ms.slice(0, 4).join(", ") || "mystery",
+    first: ms[0] || "mystery",
+    last: ms[ms.length - 1] || "wonder"
+  };
+}
+const STORY_TMPL = {
+  cool: p => `Long ago, beneath the white walls of Himeji Castle, a traveler arrived from across the sea. The gatekeeper asked their name and heard "${p.kana}." A brush was raised, and the name was carved anew: ${p.kanji} — a warrior's name of ${p.list}. They say when ${p.first} meets ${p.last}, even the castle crows bow their heads.`,
+  elegant: p => `In the season of falling cherry blossoms, a name drifted over the sea to Himeji. The court poets listened to its sound — "${p.kana}" — and wrote it in the old way: ${p.kanji}. A name woven from ${p.list}. It is said a name like this brings ${p.last} wherever it is spoken aloud.`,
+  lucky: p => `On New Year's morning at Himeji Castle, a fortune-teller drew a name from the sacred box: ${p.kanji} — "${p.kana}." Every character is an omen: ${p.list}. Carry it well; names like this are said to find coins in old coat pockets.`,
+  funny: p => `The innkeeper squinted, dipped the brush, and wrote "${p.kana}" as ${p.kanji}. The scribes argued for hours — is it ${p.first}? is it ${p.last}? — then gave up and declared it magnificent. A name of ${p.list}. Wear it proudly; nobody else has one.`
+};
+function nameStory() {
+  return (STORY_TMPL[currentStyle] || STORY_TMPL.cool)(storyParams());
+}
+
+function wrapText(ctx, text, x, y, maxW, lh) {
+  const words = text.split(" ");
+  let line = "", yy = y;
+  for (const w of words) {
+    const test = line ? line + " " + w : w;
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, yy); line = w; yy += lh;
+    } else line = test;
+  }
+  if (line) { ctx.fillText(line, x, yy); }
+  return yy;
+}
+
+/* Deluxe: story scroll image (IG-portrait sized) */
+function drawStoryScroll() {
+  const cv = document.createElement("canvas");
+  cv.width = 1080; cv.height = 1350;
+  const ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = "#f5eeda";
+  ctx.fillRect(0, 0, W, H);
+  // scroll rollers top & bottom
+  ctx.fillStyle = "#8a6a2f";
+  ctx.fillRect(0, 0, W, 34); ctx.fillRect(0, H - 34, W, 34);
+  ctx.fillStyle = "#b8963e";
+  ctx.fillRect(0, 34, W, 6); ctx.fillRect(0, H - 40, W, 6);
+  ctx.strokeStyle = "#d8c797";
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(60, 90, W - 120, H - 180);
+  const p = storyParams();
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#8a7d66";
+  ctx.font = "26px serif";
+  ctx.fillText("— A LEGEND OF YOUR NAME · 名前物語 —", W / 2, 160);
+  ctx.fillStyle = "#2b2620";
+  const nameSize = Math.min(150, Math.floor((W - 200) / Math.max(p.kanji.length, 1)));
+  ctx.font = `600 ${nameSize}px serif`;
+  ctx.fillText(p.kanji, W / 2, 200 + nameSize);
+  ctx.fillStyle = "#a5583f";
+  ctx.font = "30px serif";
+  ctx.fillText(p.kana, W / 2, 260 + nameSize);
+  ctx.fillStyle = "#4d453a";
+  ctx.font = "italic 34px serif";
+  wrapText(ctx, nameStory(), W / 2, 360 + nameSize, W - 260, 54);
+  // seal
+  ctx.strokeStyle = "#c73e2d";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(W - 210, H - 240, 84, 84);
+  ctx.fillStyle = "#c73e2d";
+  ctx.font = "30px serif";
+  ctx.fillText("姫", W - 168, H - 206);
+  ctx.fillText("路", W - 168, H - 174);
+  ctx.fillStyle = "#9a8f7c";
+  ctx.font = "24px serif";
+  ctx.fillText("漢字命名所 · KANJI NAME", W / 2, H - 90);
   return cv;
 }
 
@@ -1104,16 +1456,83 @@ document.getElementById("styleTabs").addEventListener("click", e => {
   if (current.length) generate(false);
 });
 
-document.getElementById("generateBtn").addEventListener("click", () => generate(false));
+document.getElementById("generateBtn").addEventListener("click", () => { generate(false); burstPetals(); });
 document.getElementById("shuffleBtn").addEventListener("click", () => generate(true));
 
 document.getElementById("wpThemes").addEventListener("click", e => {
   const chip = e.target.closest(".wp-chip");
   if (!chip) return;
+  if (chip.dataset.premium && !premium) { openPayModal(); return; }
   document.querySelectorAll(".wp-chip").forEach(c => c.classList.remove("active"));
   chip.classList.add("active");
   wpTheme = chip.dataset.theme;
 });
+
+/* ---- Deluxe unlock flow ---- */
+const payModal = document.getElementById("payModal");
+function openPayModal() { payModal.classList.add("open"); }
+function closePayModal() { payModal.classList.remove("open"); }
+document.getElementById("unlockBtn").addEventListener("click", openPayModal);
+document.getElementById("modalClose").addEventListener("click", closePayModal);
+payModal.addEventListener("click", e => { if (e.target === payModal) closePayModal(); });
+document.getElementById("payBtn").addEventListener("click", () => {
+  if (CONFIG.stripeLink) { location.href = CONFIG.stripeLink; }
+  else {
+    document.getElementById("payBtn").textContent = "Card payments launch soon — try a code ✦";
+  }
+});
+function askCode() {
+  const c = prompt("Enter your unlock code (you'll find it on your receipt):");
+  if (!c) return;
+  if (c.trim().toUpperCase() === CONFIG.unlockCode) {
+    setPremium(true);
+    closePayModal();
+    document.getElementById("premiumBadge").scrollIntoView({ behavior: "smooth", block: "center" });
+  } else {
+    alert("That code doesn't match — please check your receipt.");
+  }
+}
+document.getElementById("codeBtn").addEventListener("click", askCode);
+document.getElementById("modalCodeBtn").addEventListener("click", askCode);
+
+document.getElementById("scrollBtn").addEventListener("click", () => {
+  if (!current.length) return;
+  if (!premium) { openPayModal(); return; }
+  downloadCanvas(drawStoryScroll(), "kanji-name-story.png");
+});
+
+/* ---- Sakura burst on generate ---- */
+function burstPetals() {
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.getElementById("petalCanvas");
+  cv.width = innerWidth; cv.height = innerHeight;
+  const ctx = cv.getContext("2d");
+  const petals = Array.from({ length: 24 }, () => ({
+    x: Math.random() * cv.width, y: -30 - Math.random() * 260,
+    vy: 2 + Math.random() * 2.5, vx: (Math.random() - .5) * 1.4,
+    s: 7 + Math.random() * 9, r: Math.random() * Math.PI, vr: (Math.random() - .5) * .08
+  }));
+  const t0 = performance.now();
+  function tick(t) {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    if (t - t0 > 3000) return;
+    petals.forEach(p => {
+      p.y += p.vy; p.x += p.vx + Math.sin(t / 600 + p.s) * .6; p.r += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.globalAlpha = .75;
+      ctx.fillStyle = "#f2b8c6";
+      ctx.beginPath();
+      ctx.moveTo(0, -p.s);
+      ctx.bezierCurveTo(p.s * .8, -p.s * .4, p.s * .6, p.s * .6, 0, p.s * .55);
+      ctx.bezierCurveTo(-p.s * .6, p.s * .6, -p.s * .8, -p.s * .4, 0, -p.s);
+      ctx.fill();
+      ctx.restore();
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 document.getElementById("wallpaperBtn").addEventListener("click", () => {
   if (!current.length) return;
@@ -1155,7 +1574,19 @@ document.getElementById("linkBtn").addEventListener("click", async () => {
   setTimeout(() => btn.textContent = "Copy Link", 1600);
 });
 
-/* boot: restore from share link, else demo */
+/* boot */
+document.getElementById("priceTag").innerHTML = CONFIG.price + ' <span class="once">one-time</span>';
+document.getElementById("modalPrice").textContent = CONFIG.price;
+const bootQ = new URLSearchParams(location.search);
+if ((bootQ.get("unlock") || "").trim().toUpperCase() === CONFIG.unlockCode) setPremium(true);
+refreshPremiumUI();
+if (CONFIG.tipLink) {
+  const a = document.createElement("a");
+  a.href = CONFIG.tipLink; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = " · ♥ leave a tip";
+  document.querySelector("footer").appendChild(a);
+}
+/* restore from share link, else demo */
 if (!loadFromURL()) {
   document.getElementById("firstName").value = "Michael";
   document.getElementById("lastName").value = "Smith";
