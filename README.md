@@ -80,6 +80,22 @@
 計測イベント: `generate` / `unlock_open` / `pay_click` / `unlocked` / `dl_wallpaper` / `dl_certificate` / `dl_scroll` / `dl_tattoo`。
 ファネル: generate → unlock_open → pay_click → unlocked でCVRを毎日確認できる。
 
+## v5で追加(集客と商品力)
+
+### プログラマティックSEO(`names/`)
+- `node scripts/build-name-pages.mjs` で辞書の全266名 × 4スタイルの静的ページを自動生成
+  ("Michael in Japanese Kanji" 等のロングテール検索を狙う)
+- A-Zインデックス、sitemap.xml、robots.txt も生成。各ページから `?f=名前` でジェネレータに送客
+- **公開時**: `SITE_BASE=https://あなたのドメイン node scripts/build-name-pages.mjs` で再生成してからデプロイ。
+  Google Search Console にsitemap.xmlを登録
+- 漢字テーブルを変更したら再実行(index.htmlのデータを直接読むのでズレない)
+
+### タトゥー実寸PDF(DELUXE)
+- 透過PNG → **A4実寸PDF**(300dpi)に刷新。S/M/Lの3サイズを実寸表示、
+  1文字あたりのmm/インチをラベル表示、全文字の意味を同じ紙面に記載
+- 「100%で印刷(fit-to-pageなし)」でそのまま彫師に渡せる。競合nameinkanjiの有料商品と同等以上
+- PDFはライブラリなしの自前生成(JPEG埋め込み単ページPDF)なので依存ゼロのまま
+
 ## ロードマップ
 
 - **フェーズ2(オンライン強化)**: サーバー検証ライセンス、Stripe Webhook、多言語UI(西・仏・中)、LLMによる高精度音写

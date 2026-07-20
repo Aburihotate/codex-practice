@@ -1,0 +1,24 @@
+
+@font-face { font-family: "Yuji Syuku"; src: url(../fonts/yuji-subset.woff2) format("woff2"); font-display: swap; }
+:root { --ink:#100e0b; --card:#191611; --cream:#f2e9d5; --dim:#a2967f; --gold:#c2a35c; --line:rgba(194,163,92,.22); }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--ink); color:var(--cream); font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif; line-height:1.65; padding:2.5rem 1.2rem 4rem; }
+main { max-width:680px; margin:0 auto; }
+a { color:var(--gold); }
+.crumb { font-size:.8rem; margin-bottom:1.6rem; }
+h1 { font-size:1.7rem; margin-bottom:.8rem; letter-spacing:.02em; }
+.lede { color:var(--dim); margin-bottom:1.8rem; }
+.inline-k { font-family:"Yuji Syuku",serif; color:var(--cream); font-size:1.15em; }
+section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1.3rem 1.5rem; margin-bottom:1.1rem; }
+h2 { font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; }
+.big { font-family:"Yuji Syuku",serif; font-size:2.6rem; line-height:1.3; margin-bottom:.6rem; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+td { padding:.3rem .4rem; border-bottom:1px solid rgba(194,163,92,.12); color:var(--dim); }
+tr:last-child td { border-bottom:none; }
+.k { font-family:"Yuji Syuku",serif; font-size:1.4rem; color:var(--cream); width:2.5rem; }
+.r { color:#cf6a52; width:4rem; font-size:.78rem; }
+.cta { margin:1.6rem 0; font-size:1.02rem; }
+footer { font-size:.78rem; color:#6e6552; margin-top:2rem; }
+ul.az { list-style:none; columns:3; }
+ul.az li { margin:.15rem 0; }
+@media (max-width:520px){ ul.az{columns:2} }

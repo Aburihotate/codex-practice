@@ -480,7 +480,7 @@
       <li><em>No watermark</em> on any wallpaper</li>
       <li><em>Print-ready certificate</em> — high resolution, ornate border</li>
       <li><em>Your Name Story scroll</em> — a legend written just for your name</li>
-      <li><em>Tattoo ink sheet</em> — large transparent PNG, ready for your artist</li>
+      <li><em>Tattoo sheet PDF</em> — true-to-scale S/M/L sizes with meanings, print &amp; hand to your artist</li>
       <li>Yours forever on this device · supports a tiny team in Himeji ♥</li>
     </ul>
     <div class="actions">
@@ -510,11 +510,11 @@
     </details>
     <details>
       <summary>What exactly is in the Deluxe pack?</summary>
-      <p>Three exclusive calligraphy wallpaper themes, watermark-free downloads, a print-ready high-resolution certificate, your personal Name Story scroll, and a tattoo-ready ink sheet. One payment, this device, forever.</p>
+      <p>Three exclusive calligraphy wallpaper themes, watermark-free downloads, a print-ready high-resolution certificate, your personal Name Story scroll, and a true-scale tattoo sheet PDF. One payment, this device, forever.</p>
     </details>
     <details>
       <summary>Is the tattoo sheet safe to use?</summary>
-      <p>The kanji are real and the meanings are shown right on this page — no "accidental soup menu" tattoos. Still, we recommend showing it to a Japanese speaker before it becomes permanent. Your artist will love the high-res transparent file.</p>
+      <p>The PDF prints at true scale (S/M/L) with the meaning of every character on the sheet. The kanji are real and the meanings are shown right on this page — no "accidental soup menu" tattoos. Still, we recommend showing it to a Japanese speaker before it becomes permanent. Your artist will love the high-res transparent file.</p>
     </details>
     <details>
       <summary>Can I get a framed print or a hanko stamp?</summary>
@@ -524,13 +524,13 @@
 </main>
 
 <footer>
-  Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Calligraphy font: Yuji Syuku · Kanji chosen phonetically (ateji 当て字) · <a href="legal.html">Legal &amp; Privacy 特定商取引法表記</a>
+  Made with ♥ near <span class="himeji">Himeji Castle 姫路城</span> · Calligraphy font: Yuji Syuku · Kanji chosen phonetically (ateji 当て字) · <a href="names/index.html">Browse names A–Z</a> · <a href="legal.html">Legal &amp; Privacy 特定商取引法表記</a>
 </footer>
 
 <div class="modal-overlay" id="payModal">
   <div class="modal">
     <h3>✦ Deluxe — <span id="modalPrice">$6.99</span></h3>
-    <p>Unlock the Sakura, Gold Leaf &amp; Indigo calligraphy themes, watermark-free wallpapers, the print-ready certificate, your personal Name Story scroll, and the tattoo-ready ink sheet. One-time payment for this device.</p>
+    <p>Unlock the Sakura, Gold Leaf &amp; Indigo calligraphy themes, watermark-free wallpapers, the print-ready certificate, your personal Name Story scroll, and the true-scale tattoo sheet PDF. One-time payment for this device.</p>
     <div class="actions">
       <button class="primary" id="payBtn">Pay with card →</button>
       <button class="secondary" id="modalCodeBtn">Enter unlock code</button>
@@ -1331,6 +1331,118 @@ function drawTattoo() {
   return cv;
 }
 
+/* Deluxe: true-scale tattoo sheet.
+   Rendered at 300dpi on an A4 canvas, then wrapped in a hand-built
+   single-page PDF (JPEG XObject) so sizes print exactly when the user
+   prints at 100%. No PDF library needed. */
+function drawTattooSheet() {
+  const MM = 300 / 25.4;                     // px per mm at 300dpi
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(210 * MM);
+  cv.height = Math.round(297 * MM);
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  const parts = [[]];
+  current.forEach(m => m.sep ? parts.push([]) : parts[parts.length - 1].push(m));
+  const cols = parts.filter(p => p.length);
+  const maxLen = Math.max(...cols.map(p => p.length), 1);
+  const units = current.filter(m => !m.sep);
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#111";
+  ctx.font = `${7 * MM}px "Yuji Syuku", serif`;
+  ctx.fillText("刺青下絵 · KANJI TATTOO SHEET", cv.width / 2, 15 * MM);
+  ctx.font = `${3.6 * MM}px serif`;
+  ctx.fillStyle = "#666";
+  ctx.fillText(units.map(m => m.kana).join("") + "  ·  Print at 100% (no fit-to-page). Sizes below are true to scale.", cv.width / 2, 22 * MM);
+
+  // three size samples, constrained by page height and width
+  const meaningsTop = 232;                    // mm
+  const areaTop = 32, areaBottom = meaningsTop - 14;
+  const Lmm = Math.max(12, Math.min(45,
+    Math.floor((areaBottom - areaTop) / (maxLen * 1.05)),
+    Math.floor(58 / (1.2 * cols.length))));
+  const sizes = [
+    { label: "S", mm: Math.max(8, Math.round(Lmm * 0.45)) },
+    { label: "M", mm: Math.max(10, Math.round(Lmm * 0.7)) },
+    { label: "L", mm: Lmm },
+  ];
+  const sampleX = [35, 105, 172];             // mm centers
+  sizes.forEach((sz, si) => {
+    const chPx = sz.mm * MM;
+    const colW = chPx * 1.2;
+    const startX = sampleX[si] * MM + (cols.length - 1) * colW / 2;
+    ctx.font = `${chPx}px "Yuji Syuku", serif`;
+    ctx.fillStyle = "#111";
+    cols.forEach((col, ci) => {
+      const x = startX - ci * colW;
+      let y = areaTop * MM + chPx * 0.9;
+      col.forEach(m => { ctx.fillText(m.kanji, x, y); y += chPx * 1.05; });
+    });
+    ctx.font = `${4 * MM}px serif`;
+    ctx.fillStyle = "#888";
+    const labelY = Math.min(areaBottom + 8, areaTop + (maxLen * sz.mm * 1.05) + 10);
+    ctx.fillText(`${sz.label} — ${sz.mm} mm / ${(sz.mm / 25.4).toFixed(2)} in per character`,
+      sampleX[si] * MM, labelY * MM);
+  });
+
+  // per-character meanings for the wearer and the artist
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#111";
+  ctx.font = `${4.4 * MM}px serif`;
+  ctx.fillText("Meaning of each character (show this to your artist):", 20 * MM, (meaningsTop + 2) * MM);
+  units.slice(0, 16).forEach((m, i) => {
+    const cx = i < 8 ? 20 : 110;
+    const cy = meaningsTop + 12 + (i % 8) * 5.8;
+    ctx.font = `${5.5 * MM}px "Yuji Syuku", serif`;
+    ctx.fillStyle = "#111";
+    ctx.fillText(m.kanji, cx * MM, cy * MM);
+    ctx.font = `${3.6 * MM}px serif`;
+    ctx.fillStyle = "#444";
+    ctx.fillText(`${m.kana} — ${m.meaning.split(";")[0]}`, (cx + 11) * MM, cy * MM);
+  });
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#999";
+  ctx.font = `${3.2 * MM}px serif`;
+  ctx.fillText("漢字命名所 · KANJI NAME — real kanji, chosen phonetically, meanings verified on this sheet", cv.width / 2, 291 * MM);
+  return cv;
+}
+
+function jpegBytesFromCanvas(cv) {
+  const bin = atob(cv.toDataURL("image/jpeg", 0.92).split(",")[1]);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+/* Minimal valid PDF: one A4 page, one JPEG XObject scaled to the full page. */
+function buildA4PdfFromJpeg(jpeg, wPx, hPx) {
+  const enc = new TextEncoder();
+  const W = 595.28, H = 841.89;
+  const chunks = [], offsets = [];
+  let pos = 0;
+  const push = d => { const b = typeof d === "string" ? enc.encode(d) : d; chunks.push(b); pos += b.length; };
+  const obj = body => { offsets.push(pos); push(body); };
+  push("%PDF-1.4\n");
+  obj("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  obj("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
+  obj(`3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`);
+  offsets.push(pos);
+  push(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${wPx} /Height ${hPx} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>\nstream\n`);
+  push(jpeg);
+  push("\nendstream\nendobj\n");
+  const content = `q ${W} 0 0 ${H} 0 0 cm /Im1 Do Q`;
+  obj(`5 0 obj\n<< /Length ${content.length} >>\nstream\n${content}\nendstream\nendobj\n`);
+  const xrefPos = pos;
+  let xref = "xref\n0 6\n0000000000 65535 f \n";
+  for (const o of offsets) xref += String(o).padStart(10, "0") + " 00000 n \n";
+  push(xref + `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefPos}\n%%EOF`);
+  return new Blob(chunks, { type: "application/pdf" });
+}
+
 function downloadCanvas(cv, filename) {
   const a = document.createElement("a");
   a.download = filename;
@@ -1477,7 +1589,13 @@ document.getElementById("tattooBtn").addEventListener("click", () => {
   if (!current.length) return;
   if (!premium) { openPayModal(); return; }
   track("dl_tattoo");
-  downloadCanvas(drawTattoo(), "kanji-tattoo-ink.png");
+  const sheet = drawTattooSheet();
+  const blob = buildA4PdfFromJpeg(jpegBytesFromCanvas(sheet), sheet.width, sheet.height);
+  const a = document.createElement("a");
+  a.download = "kanji-tattoo-truescale.pdf";
+  a.href = URL.createObjectURL(blob);
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 });
 
 /* ---- Sakura burst on generate ---- */
@@ -1577,10 +1695,16 @@ if (CONFIG.tipLink) {
   a.textContent = " · ♥ leave a tip";
   document.querySelector("footer").appendChild(a);
 }
-/* restore from share link, else demo */
+/* restore from share link, else name-page params, else demo */
 if (!loadFromURL()) {
-  document.getElementById("firstName").value = "Michael";
-  document.getElementById("lastName").value = "Smith";
+  const f0 = bootQ.get("f"), l0 = bootQ.get("l");
+  document.getElementById("firstName").value = f0 || "Michael";
+  document.getElementById("lastName").value = l0 !== null ? l0 : (f0 ? "" : "Smith");
+  if (bootQ.get("s") && document.querySelector(`.style-btn[data-style="${bootQ.get("s")}"]`)) {
+    currentStyle = bootQ.get("s");
+    document.querySelectorAll(".style-btn").forEach(b =>
+      b.classList.toggle("active", b.dataset.style === currentStyle));
+  }
   syncKana();
   generate(false);
 }
