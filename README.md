@@ -90,6 +90,10 @@
   Google Search Console にsitemap.xmlを登録
 - 漢字テーブルを変更したら再実行(index.htmlのデータを直接読むのでズレない)
 
+> ⚠️ **漢字や日本語UI文言を追加・変更したら、フォントサブセットの再生成が必須**:
+> `python3 scripts/rebuild-font-subset.py YujiSyuku-Regular.ttf`
+> (筆文字フォントは使用文字だけを埋め込んでいるため、忘れると新しい字だけ明朝体で表示される)
+
 ### タトゥー実寸PDF(DELUXE)
 - 透過PNG → **A4実寸PDF**(300dpi)に刷新。S/M/Lの3サイズを実寸表示、
   1文字あたりのmm/インチをラベル表示、全文字の意味を同じ紙面に記載
