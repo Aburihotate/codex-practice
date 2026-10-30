@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kasane ロゴ案一覧</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;500;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@700&display=swap">
+<style>
+/* Layout: a contact sheet — rounds in the order they were made, each a row of equal specimen cards on a quiet grey ground */
+:root{
+  --bg:#F1F3F5; --plate:#FFFFFF; --fg:#121820; --muted:#5D6670; --line:#DCE0E5;
+  --ai:#1F3A5F; --asagi:#1E9DB0; --moegi:#8DB83A; --vivid:#0A64C8; --gunjo:#1F3BE0; --onv:#FFFFFF;
+  --l1:#13294B; --l2:#1E4F8F; --l3:#2C7DC0; --l4:#4BB0D8; --l5:#9FD9EC;
+  --p1:#24427A; --p2:#2E86C1; --p3:#5A9E48; --p4:#E2A529; --p5:#D9667E;
+  --rec:#1F3BE0; --warn:#B4412F;
+  --t1:#172CA8; --t2:#2F48DD; --t3:#6F82F0; --t4:#A9B6FA; --t5:#D9DFFD;
+  --blend:multiply;
+  --display:"Urbanist","Helvetica Neue",Arial,sans-serif;
+  --jp:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
+  --round:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1117; --plate:#151B23; --fg:#EBEFF3; --muted:#98A2AD; --line:#27303A;
+  --ai:#7FA6D6; --asagi:#3CC3D6; --moegi:#A8D45A; --vivid:#4D9BF0; --gunjo:#7C8CFF;
+  --l1:#EAF3FA; --l2:#A9D7EE; --l3:#5DB3E0; --l4:#2F82C4; --l5:#2A5A9A;
+  --p1:#7FA4E6; --p2:#58AEE2; --p3:#86C46F; --p4:#F0BE4E; --p5:#EE8EA3;
+  --rec:#8C9BFF; --warn:#E07A66; --t1:#E2E7FF; --t2:#A9B6FA; --t3:#7C8CFF; --t4:#4458D8; --t5:#2A3590; --blend:screen; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1117; --plate:#151B23; --fg:#EBEFF3; --muted:#98A2AD; --line:#27303A;
+  --ai:#7FA6D6; --asagi:#3CC3D6; --moegi:#A8D45A; --vivid:#4D9BF0; --gunjo:#7C8CFF;
+  --l1:#EAF3FA; --l2:#A9D7EE; --l3:#5DB3E0; --l4:#2F82C4; --l5:#2A5A9A;
+  --p1:#7FA4E6; --p2:#58AEE2; --p3:#86C46F; --p4:#F0BE4E; --p5:#EE8EA3;
+  --rec:#8C9BFF; --warn:#E07A66; --t1:#E2E7FF; --t2:#A9B6FA; --t3:#7C8CFF; --t4:#4458D8; --t5:#2A3590; --blend:screen; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--jp);line-height:1.75;font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:40px 80px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:52px}
+.eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:11.5px;color:var(--muted)}
+h1{margin:0;font-weight:900;font-size:clamp(28px,4.4vw,42px);line-height:1.3}
+header{display:flex;flex-direction:column;gap:12px}
+header p{margin:0;color:var(--muted);max-width:66ch}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--plate);border-radius:999px;padding:5px 12px}
+.toc a:hover{border-color:var(--fg)}
+.toc a:focus-visible,.round a:focus-visible{outline:2px solid var(--rec);outline-offset:2px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+
+.round{display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+.rhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.rhead .l{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.rno{font-family:var(--display);font-weight:900;font-size:14px;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.rhead h2{margin:0;font-size:20px;font-weight:900}
+.rhead p{margin:0;font-size:13.5px;color:var(--muted);flex-basis:100%}
+.rhead a{font-size:13px;color:var(--rec);text-decoration:none;white-space:nowrap}
+.rhead a:hover{text-decoration:underline}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}
+.card{background:var(--plate);border:1px solid var(--line);border-radius:3px;display:flex;flex-direction:column;min-width:0}
+.card.is-rec{border-color:var(--rec)}
+.stage{height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px;border-bottom:1px solid var(--line);overflow:hidden}
+.stage svg{width:104px;height:104px;flex:none}
+.stage .row4{display:grid;grid-template-columns:repeat(2,52px);gap:10px}
+.stage .row4 svg{width:52px;height:52px}
+.info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px}
+.ttl{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ttl b{font-family:var(--display);font-weight:800;font-size:12px;color:var(--muted);letter-spacing:.06em}
+.ttl h3{margin:0;font-size:15px;font-weight:700}
+.info p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;border:1px solid currentColor}
+.chip.rec{color:var(--rec)}
+.chip.warn{color:var(--warn)}
+
+/* wordmark helpers (round 1, 3, 4, 8) */
+.w-a{position:relative;font-family:var(--display);font-weight:700;font-size:40px;letter-spacing:-.02em;line-height:1}
+.w-a span{display:block}
+.w-a .back{position:absolute;inset:0;color:var(--asagi);transform:translate(.06em,.06em);mix-blend-mode:var(--blend)}
+.w-a .front{position:relative;color:var(--ai);mix-blend-mode:var(--blend)}
+.w-b{font-family:var(--display);font-weight:800;font-size:42px;line-height:1;background:linear-gradient(180deg,var(--ai) 0 46%,var(--asagi) 46% 70%,var(--moegi) 70% 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.w-d{font-family:var(--display);font-weight:600;font-size:42px;line-height:1;display:flex}
+.w-d span{margin-right:-.11em;mix-blend-mode:var(--blend)}
+.w-d span:nth-child(odd){color:var(--ai)}.w-d span:nth-child(even){color:var(--asagi)}.w-d span:last-child{margin-right:0}
+.w-c{display:flex;align-items:center;gap:8px}
+.w-c svg{width:44px;height:44px}
+.w-c span{font-family:var(--display);font-weight:500;font-size:28px;letter-spacing:.12em}
+.slice,.diag{position:relative;font-family:var(--display);font-weight:900;font-size:36px;line-height:1;color:var(--fg)}
+.slice span,.diag span{display:block}
+.slice .t{clip-path:inset(0 0 50% 0)}
+.slice .b{position:absolute;inset:0;clip-path:inset(56% 0 0 0);transform:translateX(.07em);color:var(--vivid)}
+.diag .t{clip-path:polygon(0 0,100% 0,100% 36%,0 60%)}
+.diag .b{position:absolute;inset:0;clip-path:polygon(0 66%,100% 42%,100% 100%,0 100%);transform:translateX(.08em);color:var(--vivid)}
+.stack{display:grid;grid-template-columns:repeat(2,.74em);font-family:var(--display);font-weight:900;font-size:46px;line-height:.76;color:var(--gunjo);text-align:center}
+.tate{background:var(--gunjo);color:var(--onv);font-weight:900;display:flex;flex-direction:column;align-items:center;line-height:1;font-size:34px;padding:10px 12px;gap:1px;border-radius:2px}
+.kana{font-family:var(--round);font-weight:700;font-size:18px;letter-spacing:.14em;color:var(--fg)}
+.foot{font-size:13px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Kasane — Logo archive</div>
+    <h1>Kasane ロゴ案一覧</h1>
+    <p>これまでに出したロゴ案を、作った順にすべて並べました。各回の右上のリンクから、くわしい説明や使用例のある元のページを開けます。</p>
+    <div class="legend"><span><i class="chip rec">おすすめ</i>その回でおすすめした案</span><span><i class="chip warn">要修正</i>使う前に直しが必要な案</span></div>
+    <nav class="toc" id="toc" aria-label="回ごとの目次"></nav>
+  </header>
+  <div id="rounds" style="display:flex;flex-direction:column;gap:52px"></div>
+  <p class="foot">第3回以降の案は、佐藤可士和さん・永井一正さんの考え方を参考にした独自の案で、ご本人の作品やご監修ではありません。採用前には商標調査をおすすめします。</p>
+</div>
+
+<script>
+let uid=0; const id=p=>p+(uid++);
+const svg=(inner,vb="0 0 100 100")=>`<svg viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const B="mix-blend-mode:var(--blend)";
+
+/* ---------- round 2 symbols ---------- */
+const SYM={
+  stack:`<path d="M18 16 H82 L70 42 H6 Z" style="fill:var(--ai)"/><path d="M24 37 H88 L76 63 H12 Z" style="fill:var(--asagi);${B}"/><path d="M30 58 H94 L82 84 H18 Z" style="fill:var(--moegi);${B}"/>`,
+  eri:`<path d="M90 12 H66 L32 88 H56 Z" style="fill:var(--asagi)"/><path d="M10 12 H34 L68 88 H44 Z" style="fill:var(--ai);${B}"/><path d="M41 12 H59 L50 32 Z" style="fill:var(--moegi)"/>`,
+  k:`<rect x="16" y="12" width="22" height="76" style="fill:var(--ai)"/><path d="M26 54 L66 12 H92 L46 60 Z" style="fill:var(--asagi);${B}"/><path d="M26 46 L66 88 H92 L46 40 Z" style="fill:var(--moegi);${B}"/>`,
+  win:`<rect x="10" y="10" width="50" height="50" rx="7" style="fill:var(--ai)"/><rect x="25" y="25" width="50" height="50" rx="7" style="fill:var(--asagi);${B}"/><rect x="40" y="40" width="50" height="50" rx="7" style="fill:var(--moegi);${B}"/>`,
+  musubi:`<circle cx="37" cy="50" r="29" style="fill:var(--ai)"/><circle cx="63" cy="50" r="29" style="fill:var(--asagi);${B}"/><path d="M50 24.1 A29 29 0 0 1 50 75.9 A29 29 0 0 1 50 24.1 Z" style="fill:var(--moegi);${B}"/>`,
+  iso:`<path d="M50 50 L88 69 L50 88 L12 69 Z" style="fill:var(--moegi)"/><path d="M50 31 L88 50 L50 69 L12 50 Z" style="fill:var(--asagi);${B}"/><path d="M50 12 L88 31 L50 50 L12 31 Z" style="fill:var(--ai);${B}"/>`
+};
+
+/* ---------- round 3 ---------- */
+function n1(){let s="";[[38,"var(--ai)"],[62,"var(--asagi)"]].forEach(([cx,c])=>{for(let r=3;r<=33;r+=3)s+=`<circle cx="${cx}" cy="50" r="${r}" fill="none" stroke-width=".9" style="stroke:${c};${B}"/>`});return svg(s)}
+function n2(){let s="";for(let i=0;i<=8;i++){const t=i/8;s+=`<line x1="${66+24*t}" y1="12" x2="${32+24*t}" y2="88" stroke-width="1.1" style="stroke:var(--asagi);${B}"/><line x1="${10+24*t}" y1="12" x2="${44+24*t}" y2="88" stroke-width="1.1" style="stroke:var(--ai);${B}"/>`}return svg(s+`<path d="M43 12 H57 L50 27 Z" style="fill:var(--moegi)"/>`)}
+function n3(){let s="";for(let k=0;k<4;k++)s+=`<rect x="24" y="24" width="52" height="52" fill="none" stroke-width="1" transform="rotate(${k*22.5} 50 50)" style="stroke:var(--ai)"/>`;for(let r=6;r<=18;r+=4)s+=`<circle cx="50" cy="50" r="${r}" fill="none" stroke-width=".8" style="stroke:var(--asagi)"/>`;return svg(s+`<circle cx="50" cy="50" r="2.6" style="fill:var(--moegi)"/>`)}
+
+/* ---------- round 4/5: solid square + patterned square, overlap knocked out ---------- */
+function patt(type,x,y,a,fill){
+  let s="";
+  if(type==="h") for(let i=0;i<14;i++) s+=`<rect x="${x}" y="${y+1+i*4}" width="${a}" height="2" fill="${fill}"/>`;
+  else if(type==="v") for(let i=0;i<14;i++) s+=`<rect x="${x+1+i*4}" y="${y}" width="2" height="${a}" fill="${fill}"/>`;
+  else if(type==="d"){for(let i=-20;i<=20;i++) s+=`<rect x="${x+a/2+i*4-1}" y="${y-a}" width="2" height="${a*3}" fill="${fill}" transform="rotate(-45 ${x+a/2} ${y+a/2})"/>`}
+  else for(let i=0;i<7;i++)for(let j=0;j<7;j++) s+=`<circle cx="${x+4+i*8}" cy="${y+4+j*8}" r="2.3" fill="${fill}"/>`;
+  return s;
+}
+function layered(type="h",color="var(--vivid)"){
+  const m=id("m"),c=id("c"),o=id("o");
+  return svg(`<defs>
+    <clipPath id="${c}"><rect x="36" y="36" width="56" height="56"/></clipPath>
+    <clipPath id="${o}"><rect x="36" y="36" width="28" height="28"/></clipPath>
+    <mask id="${m}"><rect width="100" height="100" fill="#fff"/><rect x="36" y="36" width="28" height="28" fill="#000"/></mask>
+    <mask id="${m}s"><rect width="100" height="100" fill="#fff"/><g clip-path="url(#${o})">${patt(type,36,36,56,"#000")}</g></mask></defs>
+    <rect x="8" y="8" width="56" height="56" mask="url(#${m}s)" style="fill:${color}"/>
+    <g clip-path="url(#${c})" mask="url(#${m})" style="fill:${color}">${patt(type,36,36,56,"currentColor").replaceAll('fill="currentColor"',`style="fill:${color}"`)}</g>`);
+}
+
+/* ---------- round 6: 襲 ---------- */
+const K=.55, C5=["var(--l1)","var(--l2)","var(--l3)","var(--l4)","var(--l5)"];
+function collar({colors=C5,gap="var(--plate)",clipTop=12}={}){
+  const u=id("k"); let g="";
+  for(let i=4;i>=0;i--){
+    const ay=78-i*9, top=4, ee=i===0?12:4.5, lx=50-(ay-top)*K, rx=50+(ay-top)*K, ex=50-ee*K, ey=ay+ee;
+    const arm=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="7.6" style="stroke:${gap}"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="6" style="stroke:${colors[i]}"/>`;
+    g+=arm(lx,top,50,ay)+arm(rx,top,ex,ey);
+  }
+  return {u,inner:`<defs><clipPath id="${u}"><rect x="-60" y="${clipTop}" width="220" height="220"/></clipPath></defs><g clip-path="url(#${u})">${g}</g>`};
+}
+const kasaneMark=()=>svg(collar().inner);
+function person(){
+  const step=7,top=36,base=82;let s=`<circle cx="50" cy="18" r="12" style="fill:var(--l1)"/><path d="M10 52 Q10 36 26 36 H74 Q90 36 90 52 V94 H10 Z" style="fill:var(--l1)"/><line x1="50" y1="${base}" x2="${50-12*K}" y2="94" stroke-width="1.4" style="stroke:var(--plate)"/>`;
+  for(let i=0;i<5;i++){const ay=base-i*step,w=(ay-top)*K,f=i<4?C5[i+1]:"var(--plate)";s+=`<polygon points="${50-w},${top} ${50+w},${top} 50,${ay}" stroke-width="1.4" style="fill:${f};stroke:var(--plate)"/>`}
+  return svg(s);
+}
+function crest(){const u=id("cr"),c=collar({colors:["#FFFFFF","#A9D7EE","#5DB3E0","#3A8FD0","#2A62A8"],gap:"#13294B",clipTop:-60});
+  return svg(`<defs><clipPath id="${u}"><circle cx="50" cy="50" r="46"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#13294B"/><g clip-path="url(#${u})"><g transform="translate(50 50) scale(1.15) translate(-50 -50)">${c.inner}</g></g>`)}
+function scene(vb,clip){
+  const u=id("sc"),T=-300,gw=1.5*vb[2]/100;let s=`<rect x="-400" y="-400" width="1000" height="1000" style="fill:var(--l1)"/><line x1="50" y1="78" x2="${50-400*K}" y2="478" stroke-width="${gw}" style="stroke:var(--plate)"/>`;
+  for(let i=0;i<5;i++){const ay=78-i*9,w=(ay-T)*K,f=i<4?C5[i+1]:"var(--plate)";s+=`<polygon points="${50-w},${T} ${50+w},${T} 50,${ay}" stroke-width="${gw}" style="fill:${f};stroke:var(--plate)"/>`}
+  const r=clip||[vb[0],vb[1],vb[2],vb[3],0];
+  return svg(`<defs><clipPath id="${u}"><rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" rx="${r[4]||0}"/></clipPath></defs><g clip-path="url(#${u})">${s}</g>`,vb.join(" "));
+}
+
+/* ---------- round 7: 巡り重ね ---------- */
+function ring(colors){
+  const u=id("r"),R=19.5,D=24,gw=2.2,P=[...Array(5)].map((_,i)=>{const a=(-90+i*72)*Math.PI/180;return[50+D*Math.cos(a),50+D*Math.sin(a)]});
+  const c=i=>`<circle cx="${P[i][0].toFixed(2)}" cy="${P[i][1].toFixed(2)}" r="${R}" stroke-width="${gw}" style="fill:${colors[i%colors.length]};stroke:var(--plate)"/>`;
+  let s="";for(let i=4;i>=0;i--)s+=c(i);
+  return svg(s+`<defs><clipPath id="${u}"><circle cx="${P[0][0].toFixed(2)}" cy="${P[0][1].toFixed(2)}" r="${R+gw*2}"/></clipPath></defs><g clip-path="url(#${u})">${c(4)}</g>`);
+}
+
+/* ---------- round 8 ---------- */
+const kk=c=>svg(`<rect x="14" y="14" width="16" height="72" style="fill:${c}"/><polyline points="66,14 36,50 66,86" fill="none" stroke-width="14" style="stroke:${c}"/><polyline points="90,14 60,50 90,86" fill="none" stroke-width="14" style="stroke:${c}"/>`);
+function na1(){const u=id("c");let s="",y=10,i=0;while(y<90){const t=.8+i*.62;s+=`<rect x="0" y="${y.toFixed(2)}" width="100" height="${t.toFixed(2)}"/>`;y+=t+1.9;i++}return svg(`<defs><clipPath id="${u}"><circle cx="50" cy="50" r="40"/></clipPath></defs><g clip-path="url(#${u})" style="fill:var(--fg)">${s}</g>`)}
+function na2(){let s="";for(let i=0;i<16;i++){const h=40*Math.pow(.92,i);s+=`<rect x="${(50-h).toFixed(2)}" y="${(50-h).toFixed(2)}" width="${(2*h).toFixed(2)}" height="${(2*h).toFixed(2)}" transform="rotate(${i*6} 50 50)" fill="none" stroke-width=".7" style="stroke:var(--fg)"/>`}return svg(s+`<rect x="46.5" y="46.5" width="7" height="7" transform="rotate(96 50 50)" style="fill:var(--gunjo)"/>`)}
+function na3(){const m=id("m"),c=id("c");let o="",n="";for(let y=12;y<=88;y+=4){o+=`<rect x="12" y="${y}" width="76" height="2"/>`;n+=`<rect x="12" y="${y+2}" width="76" height="2"/>`}
+  return svg(`<defs><mask id="${m}"><rect width="100" height="100" fill="#fff"/><circle cx="50" cy="50" r="28" fill="#000"/></mask><clipPath id="${c}"><circle cx="50" cy="50" r="28"/></clipPath></defs><g mask="url(#${m})" style="fill:var(--fg)">${o}</g><g clip-path="url(#${c})" style="fill:var(--gunjo)">${n}</g>`)}
+
+const wa=`<div class="w-a"><span class="back" aria-hidden="true">Kasane</span><span class="front">Kasane</span></div>`;
+const stackWm=`<div class="stack"><span>K</span><span>A</span><span>S</span><span>A</span><span>N</span><span>E</span></div>`;
+
+// Round 9 marks — shared by the round-9 page and the archive page. Colours: --t1 (deepest) … --t5 (lightest), gaps in --plate.
+const R9 = (() => {
+  let n = 0; const id = p => p + "r9" + (n++);
+  const S = (inner) => `<svg viewBox="0 0 100 100" aria-hidden="true">${inner}</svg>`;
+  const G = "var(--plate)";
+  // 折り重ね: one sheet with its corner folded over itself
+  const fold = () => S(`<polygon points="10,10 50,10 90,50 90,90 10,90" style="fill:var(--t1)"/>
+    <polygon points="50,10 90,50 50,50" stroke-width="1.6" stroke-linejoin="round" style="fill:var(--t4);stroke:${G}"/>`);
+  // 末広: three sheets fanned from one pivot
+  const fan = () => {
+    const r = (a, c) => `<rect x="32" y="20" width="36" height="64" rx="5" transform="rotate(${a} 50 84)" stroke-width="2.4" style="fill:${c};stroke:${G}"/>`;
+    return S(r(-26, "var(--t4)") + r(26, "var(--t3)") + r(0, "var(--t1)"));
+  };
+  // 残像K: the K repeated, each pass a layer behind the last
+  const K = "20,15 36,15 36,43 62,15 82,15 51,48 84,85 63,85 36,55 36,85 20,85";
+  const echo = () => S(
+    `<polygon points="${K}" transform="translate(10 6)" fill="none" stroke-width="1.6" style="stroke:var(--t4)"/>` +
+    `<polygon points="${K}" transform="translate(5 3)" fill="none" stroke-width="1.6" style="stroke:var(--t3)"/>` +
+    `<polygon points="${K}" transform="translate(-4 -2)" style="fill:var(--t1)"/>`);
+  // 傘重ね: かさ（傘）を重ねる — two canopies, the front one with a handle
+  const canopy = (cx, cy, r, c) => {
+    let d = `M${cx - r} ${cy} A${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+    const w = 2 * r / 4;
+    for (let k = 0; k < 4; k++) { const x = cx + r - w * (k + 1); d += ` A${w / 2} ${w / 2.6} 0 0 0 ${x} ${cy}`; }
+    return `<path d="${d} Z" stroke-width="2.4" stroke-linejoin="round" style="fill:${c};stroke:${G}"/>`;
+  };
+  const kasa = () => S(canopy(60, 40, 30, "var(--t4)") + canopy(42, 54, 32, "var(--t1)") +
+    `<path d="M42 54 V80 a6 6 0 0 1 -12 0" fill="none" stroke-width="5" stroke-linecap="round" style="stroke:var(--t1)"/>`);
+  // 地層: time laid down in wavy strata, lightest on top
+  const strata = () => {
+    const u = id("c"), cols = ["var(--t5)", "var(--t4)", "var(--t3)", "var(--t2)", "var(--t1)"], base = [0, 28, 44, 60, 76];
+    let s = "";
+    base.forEach((b, i) => {
+      if (i === 0) { s += `<rect x="0" y="0" width="100" height="100" style="fill:${cols[0]}"/>`; return; }
+      let d = `M0 ${b}`; for (let x = 0; x <= 100; x += 5) d += ` L${x} ${(b + 3.2 * Math.sin((x / 100) * Math.PI * 2 + i * 1.3)).toFixed(2)}`;
+      s += `<path d="${d} L100 100 L0 100 Z" stroke-width="1.6" style="fill:${cols[i]};stroke:${G}"/>`;
+    });
+    return S(`<defs><clipPath id="${u}"><rect x="8" y="8" width="84" height="84" rx="20"/></clipPath></defs><g clip-path="url(#${u})">${s}</g>`);
+  };
+  // 重: the kanji built from stacked bars, lighter at the top and heavier at the bottom
+  const omoi = () => {
+    const bar = (x, y, w, h, c) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" style="fill:${c}"/>`;
+    return S(
+      bar(46, 20, 8, 70, "var(--t2)") +
+      `<line x1="70" y1="6" x2="32" y2="15" stroke-width="7" style="stroke:var(--t5)"/>` +
+      bar(14, 19, 72, 7, "var(--t4)") +
+      bar(22, 31, 56, 7, "var(--t3)") + bar(22, 31, 7, 31, "var(--t3)") + bar(71, 31, 7, 31, "var(--t3)") +
+      bar(22, 44, 56, 6, "var(--t3)") + bar(22, 56, 56, 6, "var(--t2)") +
+      bar(26, 70, 48, 7, "var(--t2)") + bar(10, 83, 80, 8, "var(--t1)"));
+  };
+  return { fold, fan, echo, kasa, strata, omoi };
+})();
+
+// Round 10 marks — shared by the round-10 page and the archive page. Colours: --t1 (deepest) … --t5 (lightest), gaps in --plate.
+const R10 = (() => {
+  let n = 0; const id = p => p + "r10" + (n++);
+  const S = inner => `<svg viewBox="0 0 100 100" aria-hidden="true">${inner}</svg>`;
+  const G = "var(--plate)";
+  const circleClip = (u, r = 42) => `<defs><clipPath id="${u}"><circle cx="50" cy="50" r="${r}"/></clipPath></defs>`;
+
+  // — 佐藤流：強い一つの形 —
+  const shift = () => S(`<polygon points="12,12 80,12 12,80" style="fill:var(--t1)"/><polygon points="88,20 88,88 20,88" style="fill:var(--t3)"/>`);
+  const doubleK = () => S(`<rect x="12" y="14" width="9" height="72" style="fill:var(--t1)"/><rect x="25" y="14" width="9" height="72" style="fill:var(--t1)"/>
+    <polyline points="80,14 44,50 80,86" fill="none" stroke-width="13" stroke-linejoin="miter" style="stroke:var(--t1)"/>`);
+  const ringOver = () => { const u = id("c");
+    return S(`<defs><clipPath id="${u}"><circle cx="40" cy="40" r="28"/></clipPath></defs>
+      <circle cx="40" cy="40" r="28" style="fill:var(--t1)"/>
+      <circle cx="60" cy="60" r="27" fill="none" stroke-width="8" style="stroke:var(--t1)"/>
+      <circle cx="60" cy="60" r="27" fill="none" stroke-width="8" clip-path="url(#${u})" style="stroke:${G}"/>`); };
+
+  // — 永井流：線と点の干渉 —
+  const moire = () => { const u = id("c"); let a = "", b = "";
+    for (let y = 4; y <= 96; y += 3) { a += `<rect x="0" y="${y}" width="100" height="1.2"/>`; b += `<rect x="-20" y="${y}" width="140" height="1.2"/>`; }
+    return S(circleClip(u) + `<g clip-path="url(#${u})" style="fill:var(--t1)">${a}<g transform="rotate(8 50 50)">${b}</g></g>`); };
+  const twinSun = () => { const u = id("c"); let s = "";
+    [[40, "var(--t1)"], [60, "var(--t3)"]].forEach(([cx, c]) => { for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180;
+      s += `<line x1="${cx}" y1="50" x2="${(cx + 60 * Math.cos(a)).toFixed(2)}" y2="${(50 + 60 * Math.sin(a)).toFixed(2)}" stroke-width=".7" style="stroke:${c}"/>`; } });
+    return S(circleClip(u) + `<g clip-path="url(#${u})">${s}</g>`); };
+  const dots = () => { const u = id("c"); let a = "", b = "";
+    for (let x = -10; x <= 110; x += 6) for (let y = -10; y <= 110; y += 6) { a += `<circle cx="${x}" cy="${y}" r="1.5"/>`; b += `<circle cx="${x}" cy="${y}" r="1.5"/>`; }
+    return S(circleClip(u) + `<g clip-path="url(#${u})"><g style="fill:var(--t1)">${a}</g><g transform="rotate(12 50 50)" style="fill:var(--t3)">${b}</g></g>`); };
+
+  // — 日本の文様 —
+  const seigaiha = () => { const u = id("c"); let s = "";
+    const scale = (cx, cy) => { let g = ""; [20, 15, 10, 5].forEach((r, i) => g += `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:${i % 2 ? G : "var(--t" + (i < 2 ? 1 : 2) + ")"}"/>`); return `<circle cx="${cx}" cy="${cy}" r="21.5" style="fill:${G}"/>` + g; };
+    [[50, [10, 50, 90]], [60, [30, 70]], [70, [10, 50, 90]], [80, [30, 70]], [90, [10, 50, 90]], [100, [30, 70]]].forEach(([y, xs]) => xs.forEach(x => s += scale(x, y)));
+    return S(`<defs><clipPath id="${u}"><rect x="10" y="30" width="80" height="60" rx="4"/></clipPath></defs><g clip-path="url(#${u})">${s}</g>`); };
+  const shippo = () => { const u = id("c"); let s = "";
+    for (let x = -10; x <= 110; x += 20) for (let y = -10; y <= 110; y += 20) s += `<circle cx="${x}" cy="${y}" r="20" fill="none" stroke-width="2.4" style="stroke:var(--t1)"/>`;
+    return S(circleClip(u) + `<g clip-path="url(#${u})">${s}</g><circle cx="50" cy="50" r="42" fill="none" stroke-width="2.4" style="stroke:var(--t1)"/>`); };
+  const mountains = () => {
+    const t = (pts, c) => `<polygon points="${pts}" stroke-width="2.6" stroke-linejoin="round" style="fill:${c};stroke:${G}"/>`;
+    return S(t("8,84 36,30 64,84", "var(--t4)") + t("28,84 58,18 88,84", "var(--t2)") + t("46,84 70,42 94,84", "var(--t1)") + `<rect x="6" y="84" width="90" height="4" style="fill:var(--t1)"/>`); };
+
+  // — ITの道具 —
+  const windows = () => {
+    const w = (x, y, front) => `<rect x="${x}" y="${y}" width="52" height="40" rx="5" stroke-width="2.6" style="fill:${front ? "var(--t1)" : G};stroke:var(--t1)"/>` +
+      `<line x1="${x}" y1="${y + 10}" x2="${x + 52}" y2="${y + 10}" stroke-width="2.2" style="stroke:${front ? G : "var(--t1)"}"/>` +
+      [0, 1, 2].map(i => `<circle cx="${x + 7 + i * 6}" cy="${y + 5}" r="1.6" style="fill:${front ? G : "var(--t1)"}"/>`).join("");
+    return S(w(10, 14) + w(24, 30) + w(38, 46, true)); };
+  const pixels = () => { let s = "";
+    for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++) {
+      const a = i < 4 && j < 4, b = i >= 2 && j >= 2; if (!a && !b) continue;
+      const c = a && b ? "var(--t3)" : a ? "var(--t1)" : "var(--t2)";
+      s += `<rect x="${14 + i * 12}" y="${14 + j * 12}" width="10" height="10" rx="1.5" style="fill:${c}"/>`; }
+    return S(s); };
+  const signal = () => {
+    const wave = (ph, amp) => { let d = ""; for (let x = 10; x <= 90; x += 2) d += (x === 10 ? "M" : " L") + x + " " + (50 + amp * Math.sin((x - 10) / 80 * Math.PI * 3 + ph)).toFixed(2); return d; };
+    return S(`<path d="${wave(Math.PI, 20)}" fill="none" stroke-width="7" stroke-linecap="round" style="stroke:var(--t3)"/>` +
+      `<path d="${wave(0, 20)}" fill="none" stroke-width="11" stroke-linecap="round" style="stroke:${G}"/>` +
+      `<path d="${wave(0, 20)}" fill="none" stroke-width="7" stroke-linecap="round" style="stroke:var(--t1)"/>`); };
+
+  return { shift, doubleK, ringOver, moire, twinSun, dots, seigaiha, shippo, mountains, windows, pixels, signal };
+})();
+
+// Round 11 — Nagai-method works. Every mark takes {c: line colour, acc: accent, bg: ground, small: simplified for ≤24px}.
+const R11 = (() => {
+  let n = 0; const id = p => p + "r11" + (n++);
+  const S = inner => `<svg viewBox="0 0 100 100" aria-hidden="true">${inner}</svg>`;
+  const f = v => +v.toFixed(2);
+
+  // 積層日輪: a sun cut into bands whose thickness grows in equal steps; the heaviest band carries the accent
+  const nichirin = ({ c, acc, small }) => {
+    const u = id("c"), N = small ? 5 : 13, gap = small ? 5 : 1.6, t0 = (80 - gap * (N - 1)) / (N * (N + 1) / 2);
+    let s = "", y = 10;
+    for (let i = 0; i < N; i++) { const t = t0 * (i + 1); s += `<rect x="0" y="${f(y)}" width="100" height="${f(t)}" style="fill:${i === N - 1 ? acc : c}"/>`; y += t + gap; }
+    return S(`<defs><clipPath id="${u}"><circle cx="50" cy="50" r="40"/></clipPath></defs><g clip-path="url(#${u})">${s}</g>`);
+  };
+  // 双心円: two families of concentric rings, centres one pitch apart, so the overlap breathes
+  const twin = ({ c, acc, small }) => {
+    const p = small ? 8 : 3.2, w = small ? 2.4 : .75; let s = "";
+    [[44, c], [56, acc]].forEach(([cx, col]) => { for (let r = p; r <= 36; r += p) s += `<circle cx="${cx}" cy="50" r="${f(r)}" fill="none" stroke-width="${w}" style="stroke:${col}"/>`; });
+    return S(s);
+  };
+  // 十六重: sixteen equal squares turned by 90°/16 each, closing into a perfect rosette
+  const juroku = ({ c, acc, small }) => {
+    const N = small ? 4 : 16, w = small ? 3 : .6; let s = "";
+    for (let i = 0; i < N; i++) s += `<rect x="22" y="22" width="56" height="56" fill="none" stroke-width="${w}" transform="rotate(${f(i * 90 / N)} 50 50)" style="stroke:${c}"/>`;
+    return S(s + `<circle cx="50" cy="50" r="${small ? 7 : 4.5}" style="fill:${acc}"/>`);
+  };
+  // 線の球: vertical lines that thicken inside a circle, so a sphere appears from line weight alone
+  const sphere = ({ c, acc, small }) => {
+    const step = small ? 10 : 3, R = 38; let s = "";
+    for (let x = 12; x <= 88.01; x += step) {
+      const dx = (x - 50) / R, inside = Math.abs(dx) < 1, h = inside ? R * Math.sqrt(1 - dx * dx) : 0;
+      const wThin = small ? 0 : .45, wThick = (small ? 3.4 : .6) + (small ? 3 : 1.9) * (inside ? Math.sqrt(1 - dx * dx) : 0);
+      if (wThin) s += `<line x1="${f(x)}" y1="10" x2="${f(x)}" y2="90" stroke-width="${wThin}" style="stroke:${c};stroke-opacity:.45"/>`;
+      if (inside) s += `<line x1="${f(x)}" y1="${f(50 - h)}" x2="${f(x)}" y2="${f(50 + h)}" stroke-width="${f(wThick)}" style="stroke:${Math.abs(x - 50) < step / 2 ? acc : c}"/>`;
+    }
+    return S(s);
+  };
+  // 積層円盤: discs laid one on another, seen slightly from above; the newest disc on top carries the accent
+  const discs = ({ c, acc, bg, small }) => {
+    const N = small ? 3 : 9, top = 30, bottom = 74, step = (bottom - top) / (N - 1); let s = "";
+    for (let i = 0; i < N; i++) { const cy = bottom - i * step, last = i === N - 1;
+      s += `<ellipse cx="50" cy="${f(cy)}" rx="36" ry="12" stroke-width="${small ? 3 : .9}" style="fill:${last ? acc : bg};stroke:${last ? acc : c}"/>`; }
+    return S(s);
+  };
+  // 生命の螺旋: seeds placed one at a time at the golden angle; each new seed is a little larger
+  const spiral = ({ c, acc, small }) => {
+    const N = small ? 21 : 220, k = 40 / Math.sqrt(N), GA = 137.508 * Math.PI / 180; let s = "";
+    for (let i = 1; i <= N; i++) { const r = k * Math.sqrt(i), a = i * GA, d = small ? 2.2 + i / N * 3.4 : .35 + i / N * 1.9;
+      s += `<circle cx="${f(50 + r * Math.cos(a))}" cy="${f(50 + r * Math.sin(a))}" r="${f(d)}" style="fill:${c}"/>`; }
+    return S(s + `<circle cx="50" cy="50" r="${small ? 3.4 : 2.2}" style="fill:${acc}"/>`);
+  };
+  return { nichirin, twin, juroku, sphere, discs, spiral };
+})();
+
+const L11={c:"var(--fg)",acc:"var(--gunjo)",bg:"var(--plate)"};
+/* ---------- data ---------- */
+const ROUNDS=[
+ {no:"01",title:"文字ロゴ",desc:"名前の意味「重ね」を、文字の形で表した最初の4案。",url:"https://claude.ai/artifact/Crvk5hwXC5qKTddP7V9XXW",items:[
+  ["A","レイヤー","同じ文字を2色でずらして重ねた形。",wa,"rec"],
+  ["B","襲の色目","文字を藍・浅葱・萌黄の3層に塗り分けた形。",`<div class="w-b">Kasane</div>`],
+  ["C","積層マーク","3枚の板を重ねたシンボルと、字間の広い大文字。",`<div class="w-c">${svg(SYM.stack)}<span>KASANE</span></div>`],
+  ["D","重ね字","文字どうしを少しずつ重ね、重なりに深い色が出る形。",`<div class="w-d"><span>K</span><span>a</span><span>s</span><span>a</span><span>n</span><span>e</span></div>`]]},
+ {no:"02",title:"シンボル",desc:"文字を使わず、形だけで「重ね」を表した6案。",url:"https://claude.ai/artifact/97vWi9x8AaxnEbamPu5RDP",items:[
+  ["A","積層","3枚の板をずらして重ねた形。",svg(SYM.stack)],
+  ["B","衿合わせ","着物の衿を重ねた形。",svg(SYM.eri),"rec","左前の向きになっているため、使う場合は左右を反転して直す必要があります。"],
+  ["C","重ねK","縦棒と2本の斜線を重ねた頭文字K。",svg(SYM.k)],
+  ["D","襲窓","角の丸い四角を3枚、斜めに重ねた形。",svg(SYM.win)],
+  ["E","結び","2つの円の重なりに葉の形が生まれる形。",svg(SYM.musubi)],
+  ["F","層","ひし形の面を3段に重ねた立体的な形。",svg(SYM.iso)]]},
+ {no:"03",title:"佐藤さん流・永井さん流（第1弾）",desc:"1色で削ぎ落とした3案と、細い線と幾何学で作った3案。",url:"https://claude.ai/artifact/65ZK6ZBdjmMbib4rduWDQW",items:[
+  ["S1","二枚","太い帯を2本ずらして重ねた形。",svg(`<rect x="8" y="27" width="66" height="20" style="fill:var(--vivid)"/><rect x="26" y="53" width="66" height="20" style="fill:var(--vivid)"/>`)],
+  ["S2","抜き重ね","正方形2つの重なりを抜いた形。",svg(`<path fill-rule="evenodd" d="M8 8 H66 V66 H8 Z M34 34 H92 V92 H34 Z" style="fill:var(--vivid)"/>`),"rec"],
+  ["S3","二層の文字","極太の文字の下半分をずらした文字ロゴ。",`<div class="slice"><span class="t">KASANE</span><span class="b" aria-hidden="true">KASANE</span></div>`],
+  ["N1","波紋","同心円を2組重ね、重なりに模様が浮かぶ形。",n1()],
+  ["N2","線の衿","衿合わせを細い平行線だけで組んだ形。",n2(),"rec"],
+  ["N3","重ね菱","正方形を22.5度ずつ回して4枚重ねた紋。",n3()]]},
+ {no:"04",title:"面と線の重ね",desc:"S2とN2を1つにまとめた決定稿候補と、同じ「抜き」のルールで作った3案。",url:"https://claude.ai/artifact/P7fgJTz6bx3Ut1jegLCBtz",items:[
+  ["—","面と線の重ね","塗りの正方形と線の正方形を重ね、重なりだけ線を反転。",layered("h"),"rec"],
+  ["K1","衿の面","衿合わせを1色にし、交わりを抜いた形。",svg(`<path fill-rule="evenodd" d="M10 12 H34 L68 88 H44 Z M90 12 H66 L32 88 H56 Z" style="fill:var(--vivid)"/>`)],
+  ["K2","抜きK","重ねKの重なりを抜いた形。",svg(`<path fill-rule="evenodd" d="M16 12 H38 V88 H16 Z M26 54 L66 12 H92 L46 60 Z M26 46 L66 88 H92 L46 40 Z" style="fill:var(--vivid)"/>`)],
+  ["K3","斜め二層","文字を衿と同じ角度で斜めに切った文字ロゴ。",`<div class="diag"><span class="t">KASANE</span><span class="b" aria-hidden="true">KASANE</span></div>`]]},
+ {no:"05",title:"動くブランド",desc:"面と線の重ねを、動き・サービス別マーク・自動生成ポスターまで広げた仕組み。",url:"https://claude.ai/artifact/D3w7qsL7qThNUj88dVLdje",items:[
+  ["—","サービス別の線","形はそのままで、線の種類と色だけを変える展開（横線・点・縦線・斜線）。",`<div class="row4">${layered("h","var(--vivid)")}${layered("o","var(--p3)")}${layered("v","var(--asagi)")}${layered("d","var(--ai)")}</div>`]]},
+ {no:"06",title:"襲（かさね）",desc:"十二単の衿元から起こした案と、「y」に見えないための改良5案。",url:"https://claude.ai/artifact/9nh6TfohJTgaooEFBW6EEh",items:[
+  ["—","襲","5枚の衣が重なる衿元。輪郭が「y」や「V」に読まれやすい形です。",kasaneMark()],
+  ["改良A","ひと","衿の上に頭と肩を足した人の姿。",person(),"rec"],
+  ["改良B","家紋","衿を円に収めた形。",crest()],
+  ["改良C","逆三角","衿の開きを正方形いっぱいに広げた形。",scene([50-66*K,12,132*K,132*K])],
+  ["改良D","合わせ目","交わるあたりを中心をずらして切り取った形。",scene([30,38,62,62])],
+  ["改良E","衣","縦長の前身頃の形に切り取った形。",scene([-10,10,120,120],[50-66*K,12,132*K,116,1.5])]]},
+ {no:"07",title:"巡り重ね",desc:"衿の形から離れた別案。5つの円が輪になって互いに重なる。",url:"https://claude.ai/artifact/C2PNN93tws7Yg697NJmwp8",items:[
+  ["—","巡り重ね（1色）","どの円もとなりの上で、反対どなりの下。",`${ring(["var(--p1)"])}<span class="kana">かさね</span>`],
+  ["—","巡り重ね（5色）","藍・縹・若竹・山吹・紅梅の5色版。",ring(["var(--p1)","var(--p2)","var(--p3)","var(--p4)","var(--p5)"])]]},
+ {no:"08",title:"巨匠の方法から作り直し",desc:"二人の作り方を整理し、本質「重ねるほど、強くなる。」からゼロで作った6案。",url:"https://claude.ai/artifact/V511Ln8QwNTA5uSsbpLWg5",items:[
+  ["SA1","三段重ね","KA・SA・NEの3音を3段に積んだ文字ロゴ。",stackWm,"rec"],
+  ["SA2","縦三段","ひらがな「かさね」を縦に重ねた形。",`<div class="tate"><span>か</span><span>さ</span><span>ね</span></div>`],
+  ["SA3","重ねK","Kの斜めを二重の「く」にした形。",kk("var(--gunjo)")],
+  ["NA1","積層の日輪","円を、下ほど厚い層で切った形。",na1()],
+  ["NA2","渦重ね","正方形を回しながら16枚重ねた形。",na2()],
+  ["NA3","ずれの円","横線を円の中だけずらして円を浮かべた形。",na3(),"rec"]]},
+ {no:"09",title:"新しい切り口",desc:"紙、扇、残像、傘、地層、漢字という、これまで使っていない題材から考えた6案。",url:"https://claude.ai/artifact/5qwr6c16LEeagRdNGxCA3n",items:[
+  ["9-1","折り重ね","一枚の正方形の角を折り返した形。Filerの紙ともつながる。",R9.fold(),"rec"],
+  ["9-2","末広","3枚の紙を扇のように広げて重ねた形。",R9.fan(),"rec"],
+  ["9-3","残像K","Kを少しずつずらして3回重ねた形。",R9.echo()],
+  ["9-4","傘重ね","「かさ」を傘に重ねた言葉遊び。",R9.kasa()],
+  ["9-5","地層","波打つ5つの層を、下ほど濃く重ねた形。",R9.strata()],
+  ["9-6","重","漢字の「重」を、横棒の重なりで組み直した形。",R9.omoi()]]},
+ {no:"10",title:"4つの方向から12案",desc:"佐藤さん流の強い形、永井さん流の線と点の干渉、日本の文様、ITの道具から3案ずつ。",url:"https://claude.ai/artifact/2BTLgKnuKLZuRWrrXMRE9x",items:[
+  ["10-1","ずらし正方形","対角線で割った正方形の片方をずらした形。",R10.shift()],
+  ["10-2","二重K","縦棒を2本にしたK。",R10.doubleK()],
+  ["10-3","重ね丸","塗りの円に輪を重ね、重なりを抜いた形。",R10.ringOver(),"rec"],
+  ["10-4","モアレ","平行線を2組、角度を変えて重ねた形。",R10.moire(),"rec"],
+  ["10-5","二つの日輪","放射状の線を2組ずらして重ねた形。",R10.twinSun()],
+  ["10-6","点の重なり","点の並びを2組、回して重ねた形。",R10.dots()],
+  ["10-7","青海波","半円を重ねて波を描く文様。",R10.seigaiha(),"rec"],
+  ["10-8","七宝","円を四方に重ね続ける文様。",R10.shippo()],
+  ["10-9","重ね山","3つの山を前後に重ねた形。",R10.mountains()],
+  ["10-10","ウィンドウ重ね","画面のウィンドウを3枚重ねた形。",R10.windows()],
+  ["10-11","ピクセル重ね","画素の四角を2つ重ねた形。",R10.pixels()],
+  ["10-12","信号","2本の波を重ねた形。",R10.signal()]]},
+ {no:"11",title:"永井さんの方法で作る6作品",desc:"定規とコンパスの作図だけで形を決めた、永井一正さん流の6作品。",url:"https://claude.ai/artifact/LufKFiswKy4ucDWdhuTqvA",items:[
+  ["No.01","積層日輪","円を13本の帯に切り、下ほど太くした形。",R11.nichirin(L11)],
+  ["No.02","双心円","同心円を2組、中心をずらして重ねた形。",R11.twin(L11)],
+  ["No.03","十六重","正方形を5.625°ずつ回して16枚重ねた形。",R11.juroku(L11)],
+  ["No.04","線の球","縦線の太さだけで球を浮かび上がらせた形。",R11.sphere(L11),"rec"],
+  ["No.05","積層円盤","円盤を9枚積み上げた形。",R11.discs(L11)],
+  ["No.06","生命の螺旋","黄金角で点を一つずつ重ねた形。",R11.spiral(L11),"rec"]]}
+];
+
+/* ---------- render ---------- */
+document.getElementById("toc").innerHTML=ROUNDS.map(r=>`<a href="#r${r.no}">${r.no} ${r.title}</a>`).join("");
+document.getElementById("rounds").innerHTML=ROUNDS.map(r=>`
+  <section class="round" id="r${r.no}">
+    <div class="rhead"><div class="l"><span class="rno">第${+r.no}回</span><h2>${r.title}</h2></div><a href="${r.url}" target="_blank" rel="noopener">元のページを開く ↗</a><p>${r.desc}　${r.items.length}案</p></div>
+    <div class="cards">${r.items.map(([code,name,desc,art,rec,warn])=>`
+      <article class="card${rec?" is-rec":""}">
+        <div class="stage">${art}</div>
+        <div class="info">
+          <div class="ttl">${code!=="—"?`<b>${code}</b>`:""}<h3>${name}</h3></div>
+          ${rec||warn?`<div class="chips">${rec?'<span class="chip rec">おすすめ</span>':""}${warn?'<span class="chip warn">要修正</span>':""}</div>`:""}
+          <p>${desc}${warn?" "+warn:""}</p>
+        </div>
+      </article>`).join("")}</div>
+  </section>`).join("");
+</script>
+
+</body>
+</html>
